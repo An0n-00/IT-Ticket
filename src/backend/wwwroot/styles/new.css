@@ -1,0 +1,103 @@
+/* new.css */
+
+/* Style for the form container */
+.create-form {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #ccc;
+}
+
+.create-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.create-form input {
+    cursor: text;
+}
+
+/* Style for form elements */
+.create-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-dark-color);
+}
+
+.create-form input[type="text"],
+.create-form textarea,
+.create-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.create-form select {
+    background-color: green;
+}
+
+.create-form textarea {
+    resize: vertical;
+    min-height: 40px;
+    cursor: text;
+}
+
+.create-form select, .create-form option {
+    cursor: pointer;
+}
+
+.create-form input[type="text"]:focus,
+.create-form textarea:focus,
+.create-form select:focus {
+    border-color: var(--button-light-color);
+    box-shadow: 0 0 5px var(--button-light-color);
+}
+
+/* Style for the submit button */
+.create-form button[type="submit"] {
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.create-form button[type="submit"]:hover {
+    background-color: var(--button-light-color);
+    transform: scale(1.05);
+}
+
+.create-form button[type="submit"]:active {
+    transform: scale(0.95);
+}
+
+/* Flex container for the button */
+.flex-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .create-form {
+        padding: 15px;
+    }
+
+    .create-form button[type="submit"] {
+        width: 100%;
+    }
+}
+
+.create-form h2 {
+    padding-bottom: 15px;
+}

@@ -1,0 +1,142 @@
+#search-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#search-query {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    margin-right: 10px;
+    font-size: 1rem;
+    transition: box-shadow 0.3s ease;
+}
+
+select, button, i, option, optgroup {
+    cursor: pointer;
+}
+
+.searchbar {
+    width: 30%;
+}
+
+input[type="text"] {
+    cursor: text;
+}
+
+
+#search-area input:active, #search-area input:focus, #search-area select:hover, #search-area select:active, #search-area select:focus, #search-area button:active, #search-area button:focus {
+    outline: none;
+    box-shadow: 0 0 10px var(--button-light-color);
+}
+
+#search-button {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-size: 1rem;
+}
+
+#search-button:hover {
+    background-color: var(--button-light-color);
+    transform: scale(1.05);
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.filters * {
+    width: 14.8%;
+}
+
+.filters select {
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    background-color: var(--secondary-color);
+    color: var(--text-dark-color);
+    transition: background-color 0.3s;
+}
+
+#results {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+.issue {
+    margin: 25px !important;
+    width: 100%;
+    background-color: var(--text-light-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.issue * {
+    cursor: pointer !important;
+}
+
+#issue {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.issue-author {
+    font-size: 0.8rem;
+    color: var(--text-dark-color);
+}
+
+.issue-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.issue-meta p {
+    margin: 0 10px;
+    color: var(--text-dark-color);
+}
+
+.issue h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.issue p {
+    margin: 5px 0;
+    color: var(--text-dark-color);
+}

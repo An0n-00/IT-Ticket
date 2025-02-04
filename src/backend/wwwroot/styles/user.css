@@ -1,0 +1,105 @@
+/* user.css */
+
+/* User Information Section */
+#user-info {
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+#user-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+#user-info p {
+    margin: 5px;
+    color: var(--text-dark-color);
+}
+
+#user-info span {
+    font-weight: bold;
+}
+
+/* User Issues Section */
+#user-issues {
+    padding: 20px;
+    border-radius: var(--border-radius);
+}
+
+#user-issues h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+#user-issues-list {
+    list-style: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+#user-issues-list * {
+    cursor: pointer;
+}
+
+#user-issues-list article {
+    background-color: var(--text-light-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#user-issues-list article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.issue {
+    margin-right: 15px;
+}
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.issue-header h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.issue-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.issue-meta p {
+    margin: 0 10px 0 0;
+    color: var(--text-dark-color);
+}
+
+.issue-description {
+    color: var(--text-dark-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #user-info, #user-issues {
+        padding: 15px;
+    }
+
+    .issue-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .issue-meta p {
+        margin: 5px 0;
+    }
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/styles/new.css">
+    <script src="/scripts/index.js" defer></script>
+    <script src="/scripts/new.js" defer></script>
+    <title>Create a New Ticket | IT-Ticket</title>
+</head>
+<body>
+    <header>
+        <div class="left flex-center">
+            <a href="/"><img id="header-logo" src="/images/logo.svg" alt="Logo"></a>
+        </div>
+
+        <div class="middle flex-center">
+            <h1 id="header-title">Create a New Ticket</h1>
+        </div>
+
+        <div class="right flex-center">
+            <div class="header-buttons flex-center">
+                <button id="header-button">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/pages/dashboard/"><i class="fas fa-home"></i><span>Home</span></a></li>
+                <li><a href="/pages/search"><i class="fas fa-search"></i><span>Search</span></a></li>
+                <li><a href="/pages/dashboard/new"><i class="fas fa-sticky-note"></i><span>New Issue</span></a></li>
+                <li><a href="/auth/settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            </ul>
+        </aside>
+
+        <section class="content">
+            <noscript>
+                <section class="noscript-area flex-center">
+                    <p>This website requires JavaScript to be enabled to function properly.</p>
+                </section>
+            </noscript>
+
+            <section class="create-form">
+                <h2>Create a New Issue</h2>
+                <form id="issue-form">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required></textarea>
+
+                    <label for="priority">Priority:</label>
+                    <select id="priority" name="priority" required onchange="updatePriorityColor(this)">
+                        <option value="low" style="background-color: green; color: white">Low</option>
+                        <option value="medium" style="background-color: orange; color: white">Medium</option>
+                        <option value="high" style="background-color: red; color: white">High</option>
+                    </select>
+                    
+                    <div class="flex-container">
+                        <button type="submit">Create Issue</button>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <div class="left flex-center">
+            <span id="footer-contact">Contact us at <a href="mailto:contact@IT-Ticket.com">contact@IT-Ticket.com</a></span>
+        </div>
+
+        <div class="middle flex-center">
+            <p>&copy; 2024 IT-Ticket</p>
+        </div>
+
+        <div class="right flex-center">
+            <section class="footer-links flex-center">
+                <a id="footer-about" href="/pages/about">About</a>
+                <a id="footer-privacy" href="/pages/privacy">Privacy</a>
+                <a id="footer-terms" href="/pages/terms">Terms</a>
+            </section>
+        </div>
+    </footer>
+</body>
+</html>

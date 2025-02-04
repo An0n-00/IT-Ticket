@@ -1,0 +1,24 @@
+main > section > article {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: larger;
+    height: 100%;
+}
+
+main > section > article > * {
+    width: 70%;
+    text-align: center;
+}
+
+#main-login-button {
+    margin-top: 20px;
+    height: 50px;
+    font-size: larger;
+    border: 1px solid #f8f8f8;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 60%;
+}

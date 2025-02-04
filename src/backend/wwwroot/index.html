@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/home.css">
+    <script src="/scripts/index.js" defer></script>
+    <script src="/scripts/home.js" defer></script>
+    <title>Home | IT-Ticket</title>
+</head>
+<body>
+    <header>
+        <div class="left flex-center">
+            <a href="/"><img id="header-logo" src="/images/logo.svg" alt="Logo"></a>
+        </div>
+
+        <div class="middle flex-center">
+            <h1 id="header-title">IT-Ticket</h1>
+        </div>
+
+        <div class="right flex-center">
+            <div class="header-buttons flex-center">
+                <button id="header-button">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <noscript>
+            <section class="noscript-area flex-center">
+                <p>This website requires JavaScript to be enabled to function properly.</p>
+            </section>
+        </noscript>
+        <section>
+            <article>
+                <h1>Welcome to IT-Ticket</h1>
+                <p>
+                    IT-Ticket is a platform that allows your Organization to manage IT support tickets with ease.
+                    With IT-Ticket, you can create, view, and manage support tickets for your Organization. 
+                    IT-Ticket is designed to be user-friendly and easy to use, so you can focus on what matters most.
+                    It also uses a multi-user approach, so you can have multiple users in your Organization managing tickets.
+                    <br>
+                    <br>
+                    If we have piqued your interest, feel free to <a href="/pages/about">learn more</a> about us!
+                </p>
+                <button id="main-login-button" onclick="redirectToSite('/auth/login')">Login</button>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <div class="left flex-center">
+            <span id="footer-contact">Contact us at <a href="mailto:contact@IT-Ticket.com">contact@IT-Ticket.com</a></span>
+        </div>
+
+        <div class="middle flex-center">
+            <p>&copy; 2024 IT-Ticket</p>
+        </div>
+
+        <div class="right flex-center">
+            <section class="footer-links flex-center">
+                <a id="footer-about" href="/pages/about">About</a>
+                <a id="footer-privacy" href="/pages/privacy">Privacy</a>
+                <a id="footer-terms" href="/pages/terms">Terms</a>
+            </section>
+        </div>
+    </footer>
+</body>
+</html>

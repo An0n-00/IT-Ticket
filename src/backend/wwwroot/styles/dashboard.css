@@ -1,0 +1,64 @@
+/* 
+STYLING STILL NEEDED!
+*/
+
+
+.issue {
+    background-color: var(--text-light-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.issue:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.issue:hover *, .issue:hover p {
+    cursor: pointer !important;
+}
+
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.issue-author {
+    font-size: 0.8rem;
+    color: var(--text-dark-color);
+}
+
+.issue-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.issue-meta p {
+    margin: 0 10px;
+    color: var(--text-dark-color);
+}
+
+.issue h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.issue p {
+    margin: 5px 0;
+    color: var(--text-dark-color);
+}
+
+.no-more-issues {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 20px;
+}

@@ -1,0 +1,80 @@
+.sidebar {
+    width: 60px;
+    height: 100dvh; 
+    background-color: var(--secondary-color);
+    position: fixed;
+    padding-top: 75px;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width 0.3s;
+    overflow: hidden;
+}
+
+.sidebar:hover {
+    width: 160px;
+}
+
+.sidebar * {
+    cursor: pointer;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.sidebar ul li {
+    width: 100%;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center icons when sidebar is collapsed */
+    padding: 15px;
+    color: var(--text-dark-color);
+    text-decoration: none;
+    transition: background-color 0.5s, justify-content 0.3s; /* Add transition for justify-content */
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--button-light-color);
+}
+
+.sidebar:hover ul li a {
+    justify-content: flex-start; /* Align icons and text to the left when sidebar expands */
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.sidebar ul li a span {
+    display: inline-block;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.3s, transform 0.3s;
+    width: 0;
+}
+
+.sidebar:hover ul li a span {
+    opacity: 1;
+    transform: translateX(0);
+    cursor: pointer;
+}
+
+/* Content section adjustment */
+.content {
+    transition: margin-left 0.3s;
+    width: 80%;
+}
+
+.sidebar:hover ~ .content {
+    margin-left: 160px;
+}

@@ -1,0 +1,77 @@
+.login-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#login-form {
+    background-color: var(--secondary-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+#login-form label {
+    color: var(--text-dark-color);
+    font-weight: bold;
+    font-size: larger;
+}
+
+#login-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: text;
+    transition: transform 0.3s;
+}
+
+#login-form input:hover, #login-form input:focus {
+    transform: scale(1.015);
+}
+
+#login-submit, #login-new-here {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    width: 100%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#login-submit:hover, #login-new-here:hover {
+    background-color: var(--button-light-color);
+    color: var(--text-dark-color);
+    transform: scale(1.015);
+}
+
+#login-submit:active, #login-new-here:active {
+    background-color: var(--button-light-color);
+    transform: scale(0.95);
+    color: var(--text-dark-color);
+}
+
+#login-new-here {
+    font-size: 0.99rem;
+    background-color: transparent;
+    color: var(--button-dark-color);
+    border: 1px solid var(--button-dark-color);
+}
+
+#login-new-here:hover {
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+}
+
+#login-new-here:active {
+    transform: scale(0.95);
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+}

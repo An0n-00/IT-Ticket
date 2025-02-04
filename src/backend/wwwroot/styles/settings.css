@@ -1,0 +1,93 @@
+#settings-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#settings-form {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#settings-form label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+#settings-form input {
+    height: 40px;
+    margin-bottom: 16px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: text;
+}
+
+.content button, #settings-form button {
+    height: 40px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.content button, #settings-form button:hover {
+    background-color: var(--button-dark-color);
+}
+
+.content button, #settings-form button {
+    transition: background-color 0.3s, transform 0.15s;
+}
+
+.content button:hover, #settings-form button:hover {
+    background-color: var(--button-light-color);
+    color: var(--text-dark-color);
+    transform: scale(1.05);
+}
+
+.content button:active, #settings-form button:active {
+    background-color: var(--button-light-color);
+    transform: scale(0.90);
+    color: var(--text-dark-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 1rem;
+}
+
+#save-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h2 {
+    padding-bottom: 15px;
+}

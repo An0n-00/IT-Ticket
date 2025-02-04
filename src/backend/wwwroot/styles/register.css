@@ -1,0 +1,99 @@
+.register-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#register-form {
+    background-color: var(--secondary-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 20px;
+}
+
+#register-form label {
+    color: var(--text-dark-color);
+    font-weight: bold;
+    font-size: larger;
+}
+
+#register-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: text;
+    transition: transform 0.3s;
+}
+
+#register-form input:hover, #register-form input:focus {
+    transform: scale(1.015);
+}
+
+#register-submit, #register-already-have-account {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    width: 100%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin: 0;
+}
+
+#register-submit:hover, #register-already-have-account:hover {
+    background-color: var(--button-light-color);
+    color: var(--text-dark-color);
+    transform: scale(1.015);
+}
+
+#register-submit:active, #register-already-have-account:active {
+    background-color: var(--button-light-color);
+    transform: scale(0.95);
+    color: var(--text-dark-color);
+}
+
+#register-already-have-account {
+    font-size: 0.99rem;
+    background-color: transparent;
+    color: var(--button-dark-color);
+    border: 1px solid var(--button-dark-color);
+    margin-top: 1rem;
+}
+
+#register-already-have-account:hover {
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+}
+
+#register-already-have-account:active {
+    transform: scale(0.95);
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+}
+
+#register-terms-div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+    font-size: smaller;
+}
+
+#register-terms-div input {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+#register-terms-div a {
+    color: var(--primary-color);
+    
+}

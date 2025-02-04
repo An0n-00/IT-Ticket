@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/register.css">
+    <script src="/scripts/index.js" defer></script>
+    <script src="/scripts/register.js" defer></script>
+    <title>Register | IT-Ticket</title>
+</head>
+<body>
+    <header>
+        <div class="left flex-center">
+            <a href="/"><img id="header-logo" src="/images/logo.svg" alt="Logo"></a>
+        </div>
+
+        <div class="middle flex-center">
+            <h1 id="header-title">Register</h1>
+        </div>
+
+        <div class="right flex-center">
+            <div class="header-buttons flex-center">
+                <button id="header-button">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <noscript>
+            <section class="noscript-area flex-center">
+                <p>This website requires JavaScript to be enabled to function properly.</p>
+            </section>
+        </noscript>
+        <section class="signup-area flex-center">
+            <!-- Logic handled in register.js -->
+            <form id="register-form">
+                <label id="register-username-label" for="register-username-field">Username:</label>
+                <input type="text" id="register-username-field" autocomplete="username" name="username" required>
+                
+                <label id="register-email-label" for="register-email-field">Email:</label>
+                <input type="email" id="register-email-field" autocomplete="email" name="email" required>
+                
+                <label id="register-first-name-label" for="register-first-name-field">First Name:</label>
+                <input type="text" id="register-first-name-field" autocomplete="given-name" name="first-name" required>
+                
+                <label id="register-last-name-label" for="register-last-name-field">Last Name:</label>
+                <input type="text" id="register-last-name-field" autocomplete="family-name" name="last-name" required>
+                
+                <label id="register-password-label" for="register-password-field">Password:</label>
+                <input type="password" id="register-password-field" autocomplete="new-password" name="password" required>
+                
+                <label id="register-confirm-password-label" for="register-confirm-password-field">Confirm Password:</label>
+                <input type="password" id="register-confirm-password-field" autocomplete="new-password" name="confirm-password" required>
+                
+                <div id="register-terms-div">
+                    <label id="register-terms-label" for="register-terms-field">I agree to the <a href="/pages/terms" target="_blank">Terms of Service</a> and <a href="/pages/privacy" target="_blank">Privacy Policy</a>:</label>
+                    <input type="checkbox" id="register-terms-field" name="terms" required>
+                </div>
+                
+                <button type="submit" id="register-submit">Register</button>
+                <button type="button" id="register-already-have-account" onclick="redirectToSite('/auth/login');">Already have an Account? Login here</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="left flex-center">
+            <span id="footer-contact">Contact us at <a href="mailto:contact@IT-Ticket.com">contact@IT-Ticket.com</a></span>
+        </div>
+
+        <div class="middle flex-center">
+            <p>&copy; 2024 IT-Ticket</p>
+        </div>
+
+        <div class="right flex-center">
+            <section class="footer-links flex-center">
+                <a id="footer-about" href="/pages/about">About</a>
+                <a id="footer-privacy" href="/pages/privacy">Privacy</a>
+                <a id="footer-terms" href="/pages/terms">Terms</a>
+            </section>
+        </div>
+    </footer>
+</body>
+</html>

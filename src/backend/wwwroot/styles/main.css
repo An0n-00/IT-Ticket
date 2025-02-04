@@ -1,0 +1,238 @@
+:root {
+    --primary-color: #006969;
+    --secondary-color: #e8e8e8;
+    --text-dark-color: #303030;
+    --text-light-color: #f4f4f4;
+    --link-light-color: #5dffd9;
+    --link-dark-color: #006969;
+    --button-light-color: #24e4b7;
+    --button-dark-color: #006969;
+    --border-radius: 5px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    cursor: default;
+    scroll-behavior: smooth;
+    scrollbar-track-color: white;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 75px 1fr 50px;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+header, footer {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    display: grid;
+    grid-template-columns: 30dvw 1fr 30dvw;
+    z-index: 100;
+}
+
+header {
+    grid-row: 1;
+}
+
+#header-logo {
+    height: 60px;
+}
+
+footer {
+    grid-row: 3;
+}
+
+main {
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header .left,footer .left {
+    grid-column: 1;
+}
+
+header .middle,footer .middle {
+    grid-column: 2;
+}
+
+header .right,footer .right {
+    grid-column: 3;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+a, #header-logo {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--link-light-color);
+    transition: transform 0.15s;
+}
+
+a:hover {
+    transform: scale(1.07);
+}
+
+a:nth-child(footer,header):hover {
+    color: var(--link-light-color);
+}
+
+.footer-links {
+    justify-content: space-between;
+    width: 60%;
+}
+
+.header-buttons button {
+    transition: background-color 0.3s, transform 0.15s;
+}
+
+.header-buttons button:hover {
+    background-color: var(--button-light-color);
+    color: var(--text-dark-color);
+    transform: scale(1.05);
+}
+
+.header-buttons button:active {
+    background-color: var(--button-light-color);
+    transform: scale(0.90);
+    color: var(--text-dark-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 1rem;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+#header-dashboard {
+    display: none;
+}
+
+span, b {
+    cursor: text;
+}
+
+@media (max-width: 669px) {
+    .header-buttons {
+        display: none;
+    }
+}
+
+@media (max-width: 985px) {
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    header .left {
+        display: none;
+    }
+    
+    footer .left {
+        display: none;
+    }
+    
+    footer .right {
+        display: none;
+    }
+}
+
+.notificationArea {
+    position: fixed;
+    z-index: 1000;
+    background-color: #ddffde;
+    color: #0ed800;
+    padding: 20px;
+    border: 1px solid #2fd800;
+    border-radius: var(--border-radius);
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.confirmationArea {
+    position: fixed;
+    z-index: 1000;
+    background-color: rgb(235 238 237 / 80%);
+    color: #1e1f22;
+    padding: 20px;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes dropDown {
+    from {
+        top: -100px;
+    }
+    to {
+        top: 18%;
+    }
+}
+
+@keyframes pushUp {
+    from {
+        top: 18%;
+    }
+    to {
+        top: -100px;
+    }
+}
+
+.errorArea, .noscript-area {
+    position: fixed;
+    z-index: 1000;
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 20px;
+    border: 1px solid #d8000c;
+    border-radius: var(--border-radius);
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: dropDown 0.8s ease-out;
+}
+
+.errorArea.pushUp, .noscript-area.pushUp, .notificationArea.pushUp, .confirmationArea.pushUp {
+    animation: pushUp 0.8s ease-out;
+}
+
+.errorArea:hover, .notificationArea:hover {
+    cursor: pointer;
+}
+
+.errorArea::selection, .noscript-area::selection, .notificationArea::selection, .confirmationArea::selection {
+    background-color: transparent;
+}
+

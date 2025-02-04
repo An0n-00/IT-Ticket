@@ -1,0 +1,76 @@
+/* 
+STYLING STILL NEEDED!
+*/
+
+.content {
+    transition: margin-left 0.3s, margin-right 0.3s;
+    margin-left: 60px; 
+    margin-right: 60px; 
+    width: calc(100% - 120px); 
+}
+
+.sidebar:hover ~ .content {
+    margin-left: 200px; 
+    width: calc(100% - 260px); 
+}
+
+.right-sidebar:hover ~ .content {
+    margin-right: 200px;
+    width: calc(100% - 260px);
+}
+
+.sidebar:hover ~ .right-sidebar:hover ~ .content {
+    margin-left: 200px; 
+    margin-right: 200px; 
+    width: calc(100% - 400px); 
+}
+
+.issue {
+    margin: 25px !important;
+    background-color: var(--text-light-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+#issue {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.issue-author {
+    font-size: 0.8rem;
+    color: var(--text-dark-color);
+}
+
+.issue-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.issue-meta p {
+    margin: 0 10px;
+    color: var(--text-dark-color);
+}
+
+.issue h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.issue p {
+    margin: 5px 0;
+    color: var(--text-dark-color);
+}

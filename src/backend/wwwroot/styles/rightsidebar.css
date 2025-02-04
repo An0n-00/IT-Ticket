@@ -1,0 +1,108 @@
+.right-sidebar {
+    width: 60px;
+    height: 100dvh;
+    background-color: var(--secondary-color);
+    position: fixed;
+    top: 0; /* Adjust top to start below the header */
+    padding-top: 75px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width 0.3s;
+    overflow: hidden;
+}
+
+.right-sidebar:hover {
+    width: 160px;
+}
+
+.right-sidebar * {
+    cursor: pointer;
+}
+
+.right-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.right-sidebar ul li {
+    width: 100%;
+}
+
+.right-sidebar ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center icons when right-sidebar is collapsed */
+    padding: 15px;
+    color: var(--text-dark-color);
+    text-decoration: none;
+    transition: background-color 0.5s, justify-content 0.5s;
+}
+
+.right-sidebar ul li a:hover {
+    background-color: var(--button-light-color);
+}
+
+.right-sidebar:hover ul li a {
+    justify-content: flex-start;
+}
+
+.right-sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.right-sidebar ul li a span {
+    display: inline-block;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.3s, transform 0.3s;
+    width: 0;
+}
+
+.right-sidebar:hover ul li a span {
+    opacity: 1;
+    transform: translateX(0);
+    cursor: pointer;
+}
+
+/* Content section adjustment */
+.content {
+    transition: margin-right 0.3s;
+    width: 80%;
+}
+
+.right-sidebar:hover ~ .content {
+    margin-right: 160px;
+}
+
+
+/* Adjust content section to account for both sidebars */
+.content {
+    transition: margin-left 0.5s ease-in-out, margin-right 0.5s ease-in-out;
+    margin-left: 60px; /* Initial margin for collapsed left sidebar */
+    margin-right: 60px; /* Initial margin for collapsed right sidebar */
+    width: calc(100% - 120px); /* Adjust width to account for both sidebars */
+}
+
+/* Adjust content section when left sidebar expands */
+.sidebar:hover ~ .content {
+    margin-left: 160px; /* Expanded width of left sidebar */
+    width: calc(100% - 160px - 60px); /* Adjust width to account for expanded left sidebar */
+}
+
+/* Adjust content section when right sidebar expands */
+.right-sidebar:hover ~ .content {
+    margin-right: 160px; /* Expanded width of right sidebar */
+    width: calc(100% - 160px - 60px); /* Adjust width to account for expanded right sidebar */
+}
+
+/* Adjust content section when both sidebars expand */
+.sidebar:hover ~ .right-sidebar:hover ~ .content {
+    margin-left: 160px; /* Expanded width of left sidebar */
+    margin-right: 160px; /* Expanded width of right sidebar */
+    width: calc(100% - 320px); /* Adjust width to account for both expanded sidebars */
+}

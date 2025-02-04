@@ -1,0 +1,98 @@
+/* edit.css */
+
+/* Style for the form container */
+.edit-form {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.edit-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.edit-form input {
+    cursor: text;
+}
+
+/* Style for form elements */
+.edit-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-dark-color);
+}
+
+.edit-form input[type="text"],
+.edit-form textarea,
+.edit-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.edit-form select {
+    background-color: green;
+}
+
+.edit-form textarea {
+    resize: vertical;
+    min-height: 40px;
+    cursor: text;
+}
+
+.edit-form select, .edit-form option {
+    cursor: pointer;
+}
+
+.edit-form input[type="text"]:focus,
+.edit-form textarea:focus,
+.edit-form select:focus {
+    border-color: var(--button-light-color);
+    box-shadow: 0 0 5px var(--button-light-color);
+}
+
+/* Style for the submit button */
+.edit-form button[type="submit"] {
+    background-color: var(--button-dark-color);
+    color: var(--text-light-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.edit-form button[type="submit"]:hover {
+    background-color: var(--button-light-color);
+    transform: scale(1.05);
+}
+
+.edit-form button[type="submit"]:active {
+    transform: scale(0.95);
+}
+
+/* Flex container for the button */
+.flex-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .edit-form {
+        padding: 15px;
+    }
+
+    .edit-form button[type="submit"] {
+        width: 100%;
+    }
+}

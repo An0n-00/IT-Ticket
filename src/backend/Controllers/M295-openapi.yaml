@@ -1,0 +1,157 @@
+﻿openapi: "3.1.0"
+info:
+  title: "M295 API"
+  description: "M295 API"
+  version: "1.0.0"
+servers:
+  - url: "https://M295"
+paths:
+  /api/Issue:
+    get:
+      summary: "GET api/Issue/All"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "status"
+          in: "query"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+        - name: "priority"
+          in: "query"
+          required: false
+        - name: "createdBy"
+          in: "query"
+          required: false
+        - name: "page"
+          in: "query"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/Issue"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+  /api/Issue/{id}:
+    get:
+      summary: "GET api/Issue/{id}"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/Issue/{id}"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/Issue/{id}"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+  /auth/api/User:
+    get:
+      summary: "GET auth/api/User"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+  /auth/api/User/{id}:
+    get:
+      summary: "GET auth/api/User/{id}"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT auth/api/User/{id}"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+        - name: "body"
+          in: "body"
+          required: false
+          schema:
+            type: "object"
+            properties:
+              email:
+                type: "string"
+              password:
+                type: "string"
+              role:
+                type: "string"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE auth/api/User/{id}"
+      security:
+        - jwtToken: []
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+  /auth/api/login:
+    post:
+      summary: "POST auth/api/login"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+  /auth/api/register:
+    post:
+      summary: "POST auth/api/register"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+  /auth/api/token:
+    post:
+      summary: "POST auth/api/token"
+      security:
+        - jwtToken: []
+      responses:
+        "200":
+          description: "OK"
+components: 
+  securitySchemes:
+    jwtToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
