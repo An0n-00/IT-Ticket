@@ -5,7 +5,7 @@
 The IT-Ticket is an IT ticketing system designed specifically for schools, enabling efficient and quick solutions to technical problems. It ensures secure user registration and maintains the confidentiality of various tickets.
 
 ![Project Phase](https://img.shields.io/static/v1?label=Project%20Phase&message=Finished&color=blue)
-![Maintenance](https://img.shields.io/static/v1?label=Maintenance&message=No&color=red)
+![Maintenance](https://img.shields.io/static/v1?label=Maintained&message=No&color=red)
 
 </div>
 
@@ -66,7 +66,7 @@ The **IT-Ticket** aims to create a user-friendly IT ticketing system tailored fo
 2. Navigate to the project directory:
 
    ```bash
-   cd IT-Ticket\src
+   cd .\src
    ```
 
 3. Set up the project using Visual Studio or the .NET CLI.
