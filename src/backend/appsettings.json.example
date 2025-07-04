@@ -1,0 +1,28 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=[Path]\\Data\\IT-Ticket-db.mdf;Integrated Security=True;Connect Timeout=30",
+    "_comment_DefaultConnection": "NOTE: The program automatically replaces [Path] with the actual path. What you have to do is to create the database file `IT-Ticket-db.mdf` in the `Data` folder. For that there is a powershell script. Just run that and it will create the database file for you. "
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "_comment_AllowedHosts": "This setting allows all hosts to access the application. For production, consider restricting this to specific domains.",
+  "Cors": {
+    "Origins": [ "http://localhost:3000" ],
+    "Headers": [ "*" ],
+    "Methods": [ "*" ]
+  },
+  "_comment_Cors": "This setting allows CORS requests from http://localhost:3000 (frontend). Adjust as necessary if you changed the frontend URL.",
+  "Jwt": {
+    "ValidIssuer": "IT-Ticket Issuer",
+    "ValidAudience": "IT-Ticket Users",
+    "IssuerSigningKey": "your-very-secure-key-here"
+  },
+  "_comment_Jwt": "This section contains JWT settings. Make sure to change the IssuerSigningKey to a secure key in production (the longer the better) LEAST 64 BIT!!!.",
+  "DefaultAdminPassword": "admin123",
+  "_comment_DefaultAdminPassword": "This is the default password for the admin user. Change it to something secure in production."
+}

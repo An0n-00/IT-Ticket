@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <DisableStaticWebAssets>true</DisableStaticWebAssets>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>IT-Ticket</AssemblyName>
+    <RootNamespace>IT-Ticket</RootNamespace>
+    <ApplicationIcon>public\icon.ico</ApplicationIcon>
+    <Title>IT-Ticket</Title>
+    <Authors>An0n</Authors>
+    <Description>IT-Ticket is a full-fledged IT ticketing system designed to streamline the process of managing IT requests and incidents. It provides a user-friendly interface for both end-users and IT support staff, enabling efficient tracking and resolution of issues.</Description>
+    <Copyright>Custom License</Copyright>
+    <PackageProjectUrl>https://github.com/An0n-01/IT-Ticket</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/An0n-01/IT-Ticket/LICENSE</PackageLicenseUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/An0n-01/IT-Ticket.git</RepositoryUrl>
+    <PackageTags>Ticketing</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\issue\**" />
+    <Content Remove="Data\issue\**" />
+    <EmbeddedResource Remove="Data\issue\**" />
+  </ItemGroup>
+
+</Project>
