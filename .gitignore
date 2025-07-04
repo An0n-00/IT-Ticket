@@ -129,3 +129,5 @@ appsettings.Production.json
 appsettings.json
 
 *.ignore
+*.env
+.env

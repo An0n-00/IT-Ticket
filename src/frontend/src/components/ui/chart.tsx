@@ -93,7 +93,7 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 
 function ChartTooltipContent({
     active,
-    payload,
+    payload = [],
     className,
     indicator = 'dot',
     hideLabel = false,
@@ -105,14 +105,21 @@ function ChartTooltipContent({
     color,
     nameKey,
     labelKey,
-}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<'div'> & {
-        hideLabel?: boolean;
-        hideIndicator?: boolean;
-        indicator?: 'line' | 'dot' | 'dashed';
-        nameKey?: string;
-        labelKey?: string;
-    }) {
+}: {
+    active?: boolean;
+    payload?: any[];
+    className?: string;
+    indicator?: 'line' | 'dot' | 'dashed';
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    label?: React.ReactNode;
+    labelFormatter?: (label: React.ReactNode, payload: any[]) => React.ReactNode;
+    labelClassName?: string;
+    formatter?: (value: any, name: string, item: any, index: number, payload: any) => React.ReactNode;
+    color?: string;
+    nameKey?: string;
+    labelKey?: string;
+}) {
     const { config } = useChart();
 
     const tooltipLabel = React.useMemo(() => {
@@ -202,23 +209,24 @@ const ChartLegend = RechartsPrimitive.Legend;
 function ChartLegendContent({
     className,
     hideIcon = false,
-    payload,
+    payload = [],
     verticalAlign = 'bottom',
     nameKey,
-}: React.ComponentProps<'div'> &
-    Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'> & {
-        hideIcon?: boolean;
-        nameKey?: string;
-    }) {
+}: React.ComponentProps<'div'> & {
+    payload?: Array<any>;
+    verticalAlign?: 'top' | 'bottom' | 'middle';
+    hideIcon?: boolean;
+    nameKey?: string;
+}) {
     const { config } = useChart();
 
-    if (!payload?.length) {
+    if (!payload.length) {
         return null;
     }
 
     return (
         <div className={cn('flex items-center justify-center gap-4', verticalAlign === 'top' ? 'pb-3' : 'pt-3', className)}>
-            {payload.map((item) => {
+            {payload.map((item: any) => {
                 const key = `${nameKey || item.dataKey || 'value'}`;
                 const itemConfig = getPayloadConfigFromPayload(config, item, key);
 

@@ -13,7 +13,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<Context>(options =>
 {
-    var defaultDbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")?.Replace("[Path]", builder.Environment.ContentRootPath);
+    var defaultDbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")?.Trim();
+    if (string.IsNullOrEmpty(defaultDbConnectionString))
+    {
+        throw new FaultyAppsettingsException(FaultyAppsettingsReason.MissingKey, "DefaultConnection is not configured in appsettings.[Development.|Production.]json. Please do that before running the application.");
+    }
     options.UseSqlServer(defaultDbConnectionString);
 });
 

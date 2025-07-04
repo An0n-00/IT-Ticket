@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=[Path]\\Data\\IT-Ticket-db.mdf;Integrated Security=True;Connect Timeout=30",
-    "_comment_DefaultConnection": "NOTE: The program automatically replaces [Path] with the actual path. What you have to do is to create the database file `IT-Ticket-db.mdf` in the `Data` folder. For that there is a powershell script. Just run that and it will create the database file for you. "
+    "DefaultConnection": "Server=localhost,[THE PORT YOU SET IN THE .ENV FILE WHEN RUNNING THE BACKEND];Database=IT-Ticket-db;User Id=sa;Password=[THE PASSWORD YOU SET IN THE .ENV FILE WHEN RUNNING THE BACKEND];TrustServerCertificate=True;",
+    "_comment_DefaultConnection": "This is the connection string for the SQL Server database. Replace [THE PORT YOU SET IN THE .ENV FILE WHEN RUNNING THE BACKEND] and [THE PASSWORD YOU SET IN THE .ENV FILE WHEN RUNNING THE BACKEND] with your actual values. You find the values in the root of the repository in the .env file.",
   },
   "Logging": {
     "LogLevel": {
