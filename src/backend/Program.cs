@@ -18,7 +18,15 @@ builder.Services.AddDbContext<Context>(options =>
     {
         throw new FaultyAppsettingsException(FaultyAppsettingsReason.MissingKey, "DefaultConnection is not configured in appsettings.[Development.|Production.]json. Please do that before running the application.");
     }
-    options.UseSqlServer(defaultDbConnectionString);
+
+    try
+    {
+        options.UseSqlServer(defaultDbConnectionString);
+    }
+    catch (Exception e)
+    {
+        throw new ControlledException("Failed to connect to the database. Please check your connection string. " + e.Message, ECode.Database_ConnectionError);
+    }
 });
 
 builder.Services.AddTransient<DbInitializer>();
@@ -37,8 +45,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CORS_CONFIG", cors =>
     {
         cors.WithOrigins(allowedOrigins)
-            .WithHeaders(allowedHeaders ?? new[] { "*" })
-            .WithMethods(allowedMethods ?? new[] { "*" });
+            .WithHeaders(allowedHeaders ?? ["*"])
+            .WithMethods(allowedMethods ?? ["*"]);
     });
 });
 

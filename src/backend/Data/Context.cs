@@ -7,17 +7,17 @@ public class Context : DbContext
     {
     }
 
-    public DbSet<Issue> Issue { get; set; } = null!;
-    public DbSet<User> User { get; set; } = null!;
-    public DbSet<Role> Role { get; set; } = null!;
+    public DbSet<Issue> Issues { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<Status> Status { get; set; } = null!;
-    public DbSet<Comment> Comment { get; set; } = null!;
-    public DbSet<Attachment> Attachment { get; set; } = null!;
-    public DbSet<Tag> Tag { get; set; } = null!;
-    public DbSet<IssueTag> IssueTag { get; set; } = null!;
-    public DbSet<AuditLog> AuditLog { get; set; } = null!;
-    public DbSet<Notification> Notification { get; set; } = null!;
-    public DbSet<Priority> Priority { get; set; } = null!;
+    public DbSet<Comment> Comments { get; set; } = null!;
+    public DbSet<Attachment> Attachments { get; set; } = null!;
+    public DbSet<Tag> Tags { get; set; } = null!;
+    public DbSet<IssueTag> IssueTags { get; set; } = null!;
+    public DbSet<AuditLog> AuditLogs { get; set; } = null!;
+    public DbSet<Notification> Notifications { get; set; } = null!;
+    public DbSet<Priority> Priorities { get; set; } = null!;
 
     /// <summary>
     /// Configures the relationships and keys for the entities in the context.
@@ -25,35 +25,35 @@ public class Context : DbContext
     /// <param name="modelBuilder">The model builder to configure the entities.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configure Issue.AssignedTo relationship
+        // Configure Issues.AssignedTo relationship
         modelBuilder.Entity<Issue>()
             .HasOne(i => i.AssignedTo)
             .WithMany()
             .HasForeignKey(i => i.AssignedToId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Issue.User relationship
+        // Configure Issues.Users relationship
         modelBuilder.Entity<Issue>()
             .HasOne(i => i.User)
             .WithMany(u => u.Issues)
             .HasForeignKey(i => i.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Issue.Status relationship
+        // Configure Issues.Status relationship
         modelBuilder.Entity<Issue>()
             .HasOne(i => i.Status)
             .WithMany()
             .HasForeignKey(i => i.StatusId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        // Configure Issue.Priority relationship
+        // Configure Issues.Priorities relationship
         modelBuilder.Entity<Issue>()
             .HasOne(i => i.Priority)
             .WithMany()
             .HasForeignKey(i => i.PriorityId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure composite primary key for IssueTag
+        // Configure composite primary key for IssueTags
         modelBuilder.Entity<IssueTag>()
             .HasKey(it => new { it.IssueId, it.TagId });
 
@@ -69,63 +69,63 @@ public class Context : DbContext
             .HasForeignKey(it => it.TagId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Configure Comment.User relationship
+        // Configure Comments.Users relationship
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.User)
             .WithMany()
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Comment.Issue relationship
+        // Configure Comments.Issues relationship
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Issue)
             .WithMany(i => i.Comments)
             .HasForeignKey(c => c.IssueId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Configure Comment.ParentComment relationship
+        // Configure Comments.ParentComment relationship
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.ParentComment)
             .WithMany(c => c.Replies)
             .HasForeignKey(c => c.ParentCommentId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Attachment.UploadedBy relationship
+        // Configure Attachments.UploadedBy relationship
         modelBuilder.Entity<Attachment>()
             .HasOne(a => a.UploadedBy)
             .WithMany()
             .HasForeignKey(a => a.UploadedById)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Attachment.Comment relationship
+        // Configure Attachments.Comments relationship
         modelBuilder.Entity<Attachment>()
             .HasOne(a => a.Comment)
             .WithMany(c => c.Attachments)
             .HasForeignKey(a => a.CommentId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        // Configure Attachment.Issue relationship
+        // Configure Attachments.Issues relationship
         modelBuilder.Entity<Attachment>()
             .HasOne(a => a.Issue)
             .WithMany(i => i.Attachments)
             .HasForeignKey(a => a.IssueId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Notification.User relationship
+        // Configure Notifications.Users relationship
         modelBuilder.Entity<Notification>()
             .HasOne(n => n.User)
             .WithMany()
             .HasForeignKey(n => n.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        // Configure AuditLog.User relationship
+        // Configure AuditLogs.Users relationship
         modelBuilder.Entity<AuditLog>()
             .HasOne(al => al.User)
             .WithMany(u => u.AuditLogs)
             .HasForeignKey(al => al.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure AuditLog.Issue relationship
+        // Configure AuditLogs.Issues relationship
         modelBuilder.Entity<AuditLog>()
             .HasOne(al => al.Issue)
             .WithMany(i => i.AuditLogs)

@@ -28,25 +28,25 @@ public class AuthController(Context context) : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO loginDto)
     {
-        User? userInDb = context.User.Include(user => user.Role).FirstOrDefault(u => u.Username == loginDto.Username);
+        User? userInDb = context.Users.Include(user => user.Role).FirstOrDefault(u => u.Username == loginDto.Username);
         
         if (userInDb == null)
         {
-            context.AuditLog.Add(new AuditLog
+            context.AuditLogs.Add(new AuditLog
             {
                 UserId = null,
                 Action = "Login Attempt",
-                Details = $"User with username {loginDto.Username} attempted to log in but does not exist."
+                Details = $"Users with username {loginDto.Username} attempted to log in but does not exist."
             });
             context.SaveChanges();
             return BadRequest(new ControlledException("Username and/or Password is wrong", ECode.UserController_Login));
         }
         
-        context.AuditLog.Add(new AuditLog
+        context.AuditLogs.Add(new AuditLog
         {
             UserId = userInDb?.Id,
             Action = "Login Attempt",
-            Details = $"User {userInDb!.Username} attempted to log in with username: {loginDto.Username}."
+            Details = $"Users {userInDb!.Username} attempted to log in with username: {loginDto.Username}."
         });
         context.SaveChanges();
 
@@ -55,33 +55,33 @@ public class AuthController(Context context) : ControllerBase
             try
             {
                 var token = CreateToken(userInDb.Id, userInDb.Username, userInDb.Role);
-                context.AuditLog.Add(new AuditLog
+                context.AuditLogs.Add(new AuditLog
                 {
                     UserId = userInDb.Id,
                     Action = "Login Success",
-                    Details = $"User {userInDb.Username} logged in successfully."
+                    Details = $"Users {userInDb.Username} logged in successfully."
                 });
                 context.SaveChanges();
                 return Ok(token);
             }
             catch (Exception e)
             {
-                context.AuditLog.Add(new AuditLog
+                context.AuditLogs.Add(new AuditLog
                 {
                     UserId = userInDb.Id,
                     Action = "Login Failed",
-                    Details = $"User {userInDb.Username} failed to login: {e.Message}"
+                    Details = $"Users {userInDb.Username} failed to login: {e.Message}"
                 });
                 context.SaveChanges();
                 return BadRequest(e.ToJson());
             }
         }
 
-        context.AuditLog.Add(new AuditLog
+        context.AuditLogs.Add(new AuditLog
         {
             UserId = userInDb.Id,
             Action = "Login Failed",
-            Details = $"User {userInDb.Username} failed to log in with the tried credentials."
+            Details = $"Users {userInDb.Username} failed to log in with the tried credentials."
         });
         context.SaveChanges();
 
@@ -126,7 +126,7 @@ public class AuthController(Context context) : ControllerBase
             }
             
             // check if the username already exists
-            if (context.User.Any(u => u.Username == registerDto.Username))
+            if (context.Users.Any(u => u.Username == registerDto.Username))
             {
                 return BadRequest(new ControlledException("Username already exists", ECode.UserController_Register));
             }
@@ -137,22 +137,22 @@ public class AuthController(Context context) : ControllerBase
                 Email = registerDto.Email,
                 Firstname = registerDto.FirstName,
                 Lastname = registerDto.LastName,
-                RoleId = context.Role.FirstOrDefault(r => r.IsDefault == true)?.Id ?? throw new ControlledException("Default user role not found", ECode.UserController_Register),
+                RoleId = context.Roles.FirstOrDefault(r => r.IsDefault == true)?.Id ?? throw new ControlledException("Default user role not found", ECode.UserController_Register),
                 Issues = new List<Issue>(),
             };
 
             var pwHash = HashGenerator.GenerateHash(registerDto.Password, out var salt);
             newUser.Password = pwHash;
             newUser.Salt = salt;
-            context.User.Add(newUser);
+            context.Users.Add(newUser);
             context.SaveChanges();
-            context.AuditLog.Add(new AuditLog
+            context.AuditLogs.Add(new AuditLog
             {
                 UserId = newUser.Id,
-                Action = "User Registration",
-                Details = $"User {newUser.Username} registered successfully."
+                Action = "Users Registration",
+                Details = $"Users {newUser.Username} registered successfully."
             });
-            context.Notification.Add(new Notification
+            context.Notifications.Add(new Notification
             {
                 UserId = newUser.Id,
                 Message = "Welcome to IT-Ticket! Your account has been created successfully."
@@ -161,22 +161,22 @@ public class AuthController(Context context) : ControllerBase
             try
             {
                 var token = CreateToken(newUser.Id, newUser.Username, newUser.Role);
-                context.AuditLog.Add(new AuditLog
+                context.AuditLogs.Add(new AuditLog
                 {
                     UserId = newUser.Id,
                     Action = "Token Creation",
-                    Details = $"User {newUser.Username} created a token successfully."
+                    Details = $"Users {newUser.Username} created a token successfully."
                 });
                 context.SaveChanges();
                 return Ok(token);
             }
             catch (Exception e)
             {
-                context.AuditLog.Add(new AuditLog
+                context.AuditLogs.Add(new AuditLog
                 {
                     UserId = newUser.Id,
                     Action = "Token Creation Failed",
-                    Details = $"User {newUser.Username} failed to create a token."
+                    Details = $"Users {newUser.Username} failed to create a token."
                 });
                 context.SaveChanges();
                 return BadRequest(e.ToJson());
@@ -202,7 +202,7 @@ public class AuthController(Context context) : ControllerBase
                     new Claim(ClaimTypes.SerialNumber, Convert.ToString(userId) ?? throw new ControlledException("UserId is null when creating the token", ECode.AuthController_CreateToken)),
                     new Claim(ClaimTypes.Name, username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.Role, role.ToString() ?? throw new ControlledException("Role is null", ECode.AuthController_CreateToken))
+                    new Claim(ClaimTypes.Role, role.ToString() ?? throw new ControlledException("Roles is null", ECode.AuthController_CreateToken))
                 ]),
                 Expires = expires,
                 Issuer = JwtHelper.ValidIssuer,
