@@ -200,9 +200,7 @@ public class AuthController(Context context) : ControllerBase
             {
                 Subject = new ClaimsIdentity([
                     new Claim(ClaimTypes.SerialNumber, Convert.ToString(userId) ?? throw new ControlledException("UserId is null when creating the token", ECode.AuthController_CreateToken)),
-                    new Claim(ClaimTypes.Name, username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.Role, role.ToString() ?? throw new ControlledException("Roles is null", ECode.AuthController_CreateToken))
                 ]),
                 Expires = expires,
                 Issuer = JwtHelper.ValidIssuer,

@@ -9,6 +9,8 @@ public class Role
     public string Name { get; set; }
     public string Description { get; set; }
     public bool IsDefault { get; set; } = false;
+    public bool IsAdmin { get; set; } = false;
+    public bool IsSupport { get; set; } = false;
     
     public virtual ICollection<User> Users { get; set; }
 }

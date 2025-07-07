@@ -36,8 +36,8 @@ public class DbInitializer
     {
         #region Create Default Roles
 
-        var adminRole = new Role { Name = "Administrator", Description = "System administrator with full access." };
-        var supportRole = new Role { Name = "Support", Description = "Support staff with access to manage issues." };
+        var adminRole = new Role { Name = "Administrator", Description = "System administrator with full access.", IsAdmin = true };
+        var supportRole = new Role { Name = "Support", Description = "Support staff with access to manage issues.", IsSupport = true };
         var userRole = new Role { Name = "User", Description = "Regular user with limited access.", IsDefault = true };
 
         context.Roles.AddRange(adminRole, userRole);
