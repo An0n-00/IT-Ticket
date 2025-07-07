@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/backend
+        working-directory: src/frontend
 
     steps:
     - name: Checkout code
