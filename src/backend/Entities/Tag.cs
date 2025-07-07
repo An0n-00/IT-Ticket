@@ -16,7 +16,7 @@ public class Tag
 }
 
 /// <summary>
-/// This is the many-to-many relationship entity between Issue and Tag. (Because an issue can have multiple tags and a tag can be associated with multiple issues)
+/// This is the many-to-many relationship entity between Issues and Tags. (Because an issue can have multiple tags and a tag can be associated with multiple issues)
 /// </summary>
 public class IssueTag
 {

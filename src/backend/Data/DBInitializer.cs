@@ -11,48 +11,62 @@ public class DbInitializer
         _configuration = configuration;
         _serviceProvider = serviceProvider;
     }
-   
+
     public void Run()
     {
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<Context>();
-        if (context.Database.EnsureCreated())
+        try
         {
-            InitializeDatabase(context);
+            if (context.Database.EnsureCreated())
+            {
+                InitializeDatabase(context);
+            }
+            Console.WriteLine("Successfully connected to the database.");
+        }
+        catch (Exception e)
+        {
+            throw new ControlledException(
+                "Failed to connect to the database. Please check your connection string. " + e.Message,
+                ECode.Database_ConnectionError);
         }
     }
-    
+
     private void InitializeDatabase(Context context)
     {
         #region Create Default Roles
 
         var adminRole = new Role { Name = "Administrator", Description = "System administrator with full access." };
         var supportRole = new Role { Name = "Support", Description = "Support staff with access to manage issues." };
-        var moderatorRole = new Role { Name = "Moderator", Description = "Moderator with limited access to manage issues and users." };
-        var userRole = new Role { Name = "User", Description = "Regular user with limited access.", IsDefault = true};
+        var userRole = new Role { Name = "User", Description = "Regular user with limited access.", IsDefault = true };
 
-        context.Role.AddRange(adminRole, userRole);
+        context.Roles.AddRange(adminRole, userRole);
         context.SaveChanges();
 
         #endregion
 
         #region Create Default Statuses
 
-        var openStatus = new Status { Name = "Open", Description = "Issue is open and needs attention.", Color = "Red" };
-        var inProgressStatus = new Status { Name = "In Progress", Description = "Issue is being worked on.", Color = "Yellow" };
-        var resolvedStatus = new Status { Name = "Resolved", Description = "Issue has been resolved.", Color = "Green" };
+        var openStatus = new Status
+            { Name = "Open", Description = "Issues is open and needs attention.", Color = "Red" };
+        var inProgressStatus = new Status
+            { Name = "In Progress", Description = "Issues is being worked on.", Color = "Yellow" };
+        var resolvedStatus = new Status
+            { Name = "Resolved", Description = "Issues has been resolved.", Color = "Green" };
 
         context.Status.AddRange(openStatus, inProgressStatus, resolvedStatus);
         context.SaveChanges();
 
         #endregion
-        
+
         #region Create Default Tags
+
         var bugTag = new Tag { Name = "Bug", Description = "Issues related to bugs in the system." };
         var featureTag = new Tag { Name = "Feature", Description = "Issues related to new features." };
+
         #endregion
 
-        #region Create Default Admin User
+        #region Create Default Admin Users
 
         var admin = new User
         {
@@ -72,23 +86,28 @@ public class DbInitializer
         admin.Password = pwHash;
         admin.Salt = salt;
 
-        context.User.Add(admin);
-        context.SaveChanges();
-
-        #endregion
-        
-        #region Create Default Priority
-
-        var highPriority = new Priority { Name = "High", Description = "High priority issues that need immediate attention.", Color = "Red" };
-        var mediumPriority = new Priority { Name = "Medium", Description = "Medium priority issues that should be addressed soon.", Color = "Yellow" };
-        var lowPriority = new Priority { Name = "Low", Description = "Low priority issues that can be addressed later.", Color = "Green" };
-
-        context.Priority.AddRange(highPriority, mediumPriority, lowPriority);
+        context.Users.Add(admin);
         context.SaveChanges();
 
         #endregion
 
-        #region Create Test Issue
+        #region Create Default Priorities
+
+        var highPriority = new Priority
+            { Name = "High", Description = "High priority issues that need immediate attention.", Color = "Red" };
+        var mediumPriority = new Priority
+        {
+            Name = "Medium", Description = "Medium priority issues that should be addressed soon.", Color = "Yellow"
+        };
+        var lowPriority = new Priority
+            { Name = "Low", Description = "Low priority issues that can be addressed later.", Color = "Green" };
+
+        context.Priorities.AddRange(highPriority, mediumPriority, lowPriority);
+        context.SaveChanges();
+
+        #endregion
+
+        #region Create Test Issues
 
         var testIssue = new Issue
         {
@@ -109,10 +128,9 @@ public class DbInitializer
             AuditLogs = new List<AuditLog>()
         };
 
-        context.Issue.Add(testIssue);
+        context.Issues.Add(testIssue);
         context.SaveChanges();
 
         #endregion
-        
     }
 }

@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/src/frontend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "📦dependencies"
+      - "🛠️npm"
+      - "🤖Dependabot"
+    assignees:
+      - "An0n-00"
+    commit-message:
+      prefix: "[dependabot - npm] "
+      
+  - package-ecosystem: "nuget" 
+    directory: "/src/backend" 
+    schedule:
+      interval: "weekly"
+    labels:
+      - "📦dependencies"
+      - "💻csharp"
+      - "🤖Dependabot"
+    assignees:
+      - "An0n-00"
+    commit-message:
+      prefix: "[dependabot - csharp] "

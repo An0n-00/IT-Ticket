@@ -56,11 +56,22 @@ public enum ECode
     [Description("Reset password process")]
     UserController_ResetPassword = 2011,
     
+    [Description("Get single user")]
+    UserController_GetCurrentUser = 2012,
+    
     [Description("Role is null")]
     AuthController_CreateToken = 2012,
     
     [Description("Faulty appsettings configuration")]
-    Appsettings_Faulty = 3000
+    Appsettings_Faulty = 3000,
     
+    [Description("Database connection error")]
+    Database_ConnectionError = 4001,
+    
+    [Description("Database initialization error")]
+    Database_InitializationError = 4002,
+    
+    [Description("Unknown Database error")]
+    Database_UnknownError = 4003
     
 }
