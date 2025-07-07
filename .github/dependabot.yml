@@ -5,8 +5,8 @@ updates:
     schedule:
       interval: "weekly"
     labels:
-      - "dependencies"
-      - "npm"
+      - "📦dependencies"
+      - "🛠️npm"
     assignees:
       - "An0n-00"
     commit-message:
@@ -17,8 +17,8 @@ updates:
     schedule:
       interval: "weekly"
     labels:
-      - "dependencies"
-      - "csharp"
+      - "📦dependencies"
+      - "💻 csharp"
     assignees:
       - "An0n-00"
     commit-message:
