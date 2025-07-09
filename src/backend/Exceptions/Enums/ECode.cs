@@ -35,6 +35,9 @@ public enum ECode
     [Description("Delete a user")]
     UserController_DeleteUser = 2004,
     
+    [Description("Suspend a user")]
+    UserController_SuspendUser,
+    
     [Description("User login")]
     UserController_Login = 2005,
     
