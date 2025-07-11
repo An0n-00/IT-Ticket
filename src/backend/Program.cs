@@ -40,6 +40,11 @@ if (allowedOrigins == null || allowedOrigins.Length == 0)
     throw new FaultyAppsettingsException(FaultyAppsettingsReason.MissingKey, "CORS Origins are not configured in appsettings.[Development.|Production.]json. Please do that before running the application.");
 }
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS_CONFIG", cors =>

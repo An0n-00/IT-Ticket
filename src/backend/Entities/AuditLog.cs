@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class AuditLog
 {
-    public AuditLog() { } // Required by EF Core
+    public AuditLog() { }
 
     public AuditLog(HttpContext httpContext)
     {

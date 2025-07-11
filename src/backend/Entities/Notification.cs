@@ -13,7 +13,7 @@ public class Notification
     public bool IsRead { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     public virtual User User { get; set; }
 
     /// <summary>

@@ -56,10 +56,10 @@ public class AuthController(Context context) : ControllerBase
         {
             _context.AuditLogs.Add(new AuditLog(HttpContext)
             {
-                UserId = userInDb.Id,
+                User = userInDb,
                 Action = "Login Attempt",
                 Details = $"User {userInDb.Id} attempted to log in but is suspended.",
-                SuspiciousScore = 1
+                SuspiciousScore = 0
             });
             _context.SaveChanges();
             return StatusCode(403, new ControlledException("Your account is suspended. Please contact support.", ECode.UserController_Login));
@@ -67,7 +67,7 @@ public class AuthController(Context context) : ControllerBase
         
         _context.AuditLogs.Add(new AuditLog(HttpContext)
         {
-            UserId = userInDb.Id,
+            User = userInDb,
             Action = "Login Attempt",
             Details = $"User {userInDb.Id} attempted to log in with username: {loginDto.Username}.",
         });
@@ -80,7 +80,7 @@ public class AuthController(Context context) : ControllerBase
                 var token = CreateToken(userInDb.Id, userInDb.Username, userInDb.Role);
                 _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = userInDb.Id,
+                    User = userInDb,
                     Action = "Login Success",
                     Details = $"User {userInDb.Id} logged in successfully."
                 });
@@ -91,7 +91,7 @@ public class AuthController(Context context) : ControllerBase
             {
                 _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = userInDb.Id,
+                    User = userInDb,
                     Action = "Login Failed",
                     Details = $"User {userInDb.Id} failed to login: {e.Message}",
                 });
@@ -102,7 +102,7 @@ public class AuthController(Context context) : ControllerBase
 
         _context.AuditLogs.Add(new AuditLog(HttpContext)
         {
-            UserId = userInDb.Id,
+            User = userInDb,
             Action = "Login Failed",
             Details = $"User {userInDb.Id} failed to log in with the tried credentials.",
             SuspiciousScore = 1
@@ -174,13 +174,13 @@ public class AuthController(Context context) : ControllerBase
             _context.SaveChanges();
             _context.AuditLogs.Add(new AuditLog(HttpContext)
             {
-                UserId = newUser.Id,
+                User = newUser,
                 Action = "User Registration",
                 Details = $"User {newUser.Id} registered successfully."
             });
             _context.Notifications.Add(new Notification
             {
-                UserId = newUser.Id,
+                User = newUser,
                 Message = "Welcome to IT-Ticket! Your account has been created successfully. Feel free to read the documentation to get started.",
             });
             _context.SaveChanges();
@@ -189,7 +189,7 @@ public class AuthController(Context context) : ControllerBase
                 var token = CreateToken(newUser.Id, newUser.Username, newUser.Role);
                 _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = newUser.Id,
+                    User = newUser,
                     Action = "Token Creation",
                     Details = $"User {newUser.Id} created a token successfully."
                 });
@@ -200,7 +200,7 @@ public class AuthController(Context context) : ControllerBase
             {
                 _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = newUser.Id,
+                    User = newUser,
                     Action = "Token Creation Failed",
                     Details = $"User {newUser.Id} failed to create a token."
                 });
