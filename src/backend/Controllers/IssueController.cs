@@ -390,6 +390,8 @@ public class IssueController(Context context) : ControllerBase
 
                     issueToUpdate.Priority = priority;
                 }
+                
+                issueToUpdate.LastUpdated = DateTime.Now;
 
                 _context.Issues.Update(issueToUpdate);
 

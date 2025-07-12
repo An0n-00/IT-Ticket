@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 #region Register DI dependencies
 
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<Context>(options =>
 
     try
     {
-        options.UseSqlServer(defaultDbConnectionString);
+        options.UseSqlServer(defaultDbConnectionString, sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
     }
     catch (Exception e)
     {
@@ -55,7 +56,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Initialize JwtHelper
 JwtHelper.Initialize(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
@@ -77,6 +77,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 });
+
+
 
 #endregion
 
