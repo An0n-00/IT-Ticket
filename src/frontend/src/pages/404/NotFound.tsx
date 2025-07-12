@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button.tsx';
 import { ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
