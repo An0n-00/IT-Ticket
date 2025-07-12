@@ -37,7 +37,7 @@ public class HelperClass
 
         if (userInDb == null)
         {
-            throw new ControlledException("User does not exist in the database.", ECode.UserController_GetUserById);
+            throw new ControlledException("Your JWT Token has expired!", ECode.UserController_GetUserById);
         }
 
         return userInDb;

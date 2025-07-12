@@ -113,8 +113,8 @@ public class Context : DbContext
 
         // Configure Notifications.Users relationship
         modelBuilder.Entity<Notification>()
-            .HasOne(n => n.User)
-            .WithMany()
+            .HasOne(n => n.User) 
+            .WithMany(u => u.Notifications)
             .HasForeignKey(n => n.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 /// <summary>
 /// This class represents a User entity in the system.
@@ -13,8 +14,10 @@ public class User
     public string Username { get; set; }
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }
+    [JsonIgnore]
     public string Password { get; set; }
     public string Email { get; set; }
+    [JsonIgnore]
     public string Salt { get; set; } = "";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
@@ -28,4 +31,5 @@ public class User
     
     public virtual ICollection<Issue>? Issues { get; set; }
     public virtual ICollection<AuditLog>? AuditLogs { get; set; }
+    public virtual ICollection<Notification>? Notifications { get; set; }
 }

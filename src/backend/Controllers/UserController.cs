@@ -1,8 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 
 /// <summary>
 /// UserController handles API operations related to users including retrieving
@@ -69,36 +67,36 @@ public class UserController(Context context) : ControllerBase
     /// 400: Returns an error message if the ID is invalid.
     /// 404: Returns an error message if the user is not found.
     /// </returns> 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public IActionResult GetUserById(Guid id)
     {
-        var userMakingRequest = HelperClass.ParseUser(User, _context);
-
-        if (userMakingRequest.Id != id && !userMakingRequest.Role.IsAdmin)
-        {
-            _context.AuditLogs.Add(new AuditLog(HttpContext)
-            {
-                UserId = userMakingRequest.Id,
-                Action = "Unauthorized Access Attempt",
-                Details =
-                    $"User {userMakingRequest.Id} attempted to access user information for ID {id} without sufficient permissions.",
-                SuspiciousScore =
-                    2 // This will only be triggered if someone tries to access another user's information without being an admin. Not an average user action.
-            });
-            _context.SaveChanges();
-
-            return Unauthorized(new ControlledException(
-                "You are not authorized to access this user's information. Your actions have been logged.",
-                ECode.UserController_GetUserById));
-        }
-
-        if (id == Guid.Empty)
-        {
-            return BadRequest(new ControlledException("Invalid ID in the path", ECode.UserController_GetUserById));
-        }
-
         try
         {
+            var userMakingRequest = HelperClass.ParseUser(User, _context);
+
+            if (userMakingRequest.Id != id && !userMakingRequest.Role.IsAdmin)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Access Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to access user information for ID {id} without sufficient permissions.",
+                    SuspiciousScore =
+                        2 // This will only be triggered if someone tries to access another user's information without being an admin. Not an average user action.
+                });
+                _context.SaveChanges();
+
+                return Unauthorized(new ControlledException(
+                    "You are not authorized to access this user's information. Your actions have been logged.",
+                    ECode.UserController_GetUserById));
+            }
+
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new ControlledException("Invalid user id", ECode.UserController_GetUserById));
+            }
+
             var userSearchedFor = _context.Users
                 .Where(u => u.Id == id)
                 .Include(u => u.Role)
@@ -147,14 +145,15 @@ public class UserController(Context context) : ControllerBase
             {
                 _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = HelperClass.ParseUser(User, _context).Id,
+                    User = HelperClass.ParseUser(User, _context),
                     Action = "Unauthorized Access Attempt",
                     Details = "User attempted to access all users without administrative privileges.",
                     SuspiciousScore =
                         3 // This will only be triggered if someone tries to access all users without being an admin. Not an average user action. 3 Points because this endpoint is only used by admins.
                 });
                 _context.SaveChanges();
-                return Unauthorized(new ControlledException("You are not authorized to access this endpoint",
+                return Unauthorized(new ControlledException(
+                    "You are not authorized to access this endpoint. Your actions have been logged.",
                     ECode.UserController_GetAllUsers));
             }
 
@@ -167,7 +166,7 @@ public class UserController(Context context) : ControllerBase
 
             _context.AuditLogs.Add(new AuditLog(HttpContext)
             {
-                UserId = HelperClass.ParseUser(User, _context).Id,
+                User = HelperClass.ParseUser(User, _context),
                 Action = "Get All Users",
                 Details = "Used admin privileges to retrieve all users."
             });
@@ -197,34 +196,34 @@ public class UserController(Context context) : ControllerBase
     /// 400: Returns an error message if the request fails validation or cannot be processed.
     /// 401: Returns an error if the user is not authenticated or the authenticated user does not have permission to update the specified user.
     /// </returns>
-    [HttpPatch("{id}")]
+    [HttpPatch("{id:guid}")]
     public IActionResult UpdateUser(Guid id, [FromBody] UpdateUserDTO userDto)
     {
-        var userMakingRequest = HelperClass.ParseUser(User, _context);
-
-        if (userMakingRequest.Id != id && !userMakingRequest.Role.IsAdmin)
-        {
-            _context.AuditLogs.Add(new AuditLog(HttpContext)
-            {
-                UserId = userMakingRequest.Id,
-                Action = "Unauthorized Update Attempt",
-                Details =
-                    $"User {userMakingRequest.Id} attempted to update user information for ID {id} without sufficient permissions.",
-                SuspiciousScore =
-                    2 // This will only be triggered if someone tries to update another user's information without being an admin. Not an average user action.
-            });
-            _context.SaveChanges();
-            return Unauthorized(new ControlledException("You are not authorized to update this user's information",
-                ECode.UserController_UpdateUser));
-        }
-
-        if (id == Guid.Empty)
-        {
-            return BadRequest(new ControlledException("Invalid ID", ECode.UserController_UpdateUser));
-        }
-
         try
         {
+            var userMakingRequest = HelperClass.ParseUser(User, _context);
+
+            if (userMakingRequest.Id != id && !userMakingRequest.Role.IsAdmin)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Update Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to update user information for ID {id} without sufficient permissions.",
+                    SuspiciousScore =
+                        2 // This will only be triggered if someone tries to update another user's information without being an admin. Not an average user action.
+                });
+                _context.SaveChanges();
+                return Unauthorized(new ControlledException("You are not authorized to update this user's information",
+                    ECode.UserController_UpdateUser));
+            }
+
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new ControlledException("Invalid ID", ECode.UserController_UpdateUser));
+            }
+
             var userToUpdate = _context.Users.Find(id);
             if (userToUpdate == null)
             {
@@ -304,35 +303,35 @@ public class UserController(Context context) : ControllerBase
     /// 401: Returns an error if the user making the request is not authenticated.
     /// 404: Returns an error if the user to suspend is not found.
     /// </returns>
-    [HttpPost("{id}/suspend")]
+    [HttpPost("{id:guid}/suspend")]
     public IActionResult SuspendUser(Guid id, [FromBody] Boolean suspend)
     {
-        var userMakingRequest = HelperClass.ParseUser(User, _context);
-
-        if (!userMakingRequest.Role.IsAdmin)
-        {
-            _context.AuditLogs.Add(new AuditLog(HttpContext)
-            {
-                UserId = userMakingRequest.Id,
-                Action = "Unauthorized Suspend Attempt",
-                Details =
-                    $"User {userMakingRequest.Id} attempted to un/suspend user with ID {id} without sufficient permissions.",
-                SuspiciousScore =
-                    3 // This will only be triggered if someone tries to suspend another user without being an admin. Not an average user action. 3 Points because this endpoint is only used by admins.
-            });
-            _context.SaveChanges();
-            return Unauthorized(new ControlledException(
-                "You are not authorized to suspend users. Your actions have been logged.",
-                ECode.UserController_SuspendUser));
-        }
-
-        if (id == Guid.Empty)
-        {
-            return BadRequest(new ControlledException("Invalid ID", ECode.UserController_SuspendUser));
-        }
-
         try
         {
+            var userMakingRequest = HelperClass.ParseUser(User, _context);
+
+            if (!userMakingRequest.Role.IsAdmin)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Suspend Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to un/suspend user with ID {id} without sufficient permissions.",
+                    SuspiciousScore =
+                        3 // This will only be triggered if someone tries to suspend another user without being an admin. Not an average user action. 3 Points because this endpoint is only used by admins.
+                });
+                _context.SaveChanges();
+                return Unauthorized(new ControlledException(
+                    "You are not authorized to suspend users. Your actions have been logged.",
+                    ECode.UserController_SuspendUser));
+            }
+
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new ControlledException("Invalid ID", ECode.UserController_SuspendUser));
+            }
+
             var userToSuspend = _context.Users.Find(id);
             if (userToSuspend == null)
             {
@@ -371,40 +370,41 @@ public class UserController(Context context) : ControllerBase
     /// </remarks>
     /// <param name="id">The unique identifier of the user to delete.</param>
     /// <returns>
-    /// 200: Returns the details of the deleted user.
+    /// 204: Returns 204 No Content.
     /// 400: Returns an error message if the input is invalid or an exception occurs during deletion.
     /// 401: Returns an error message if the user does not have sufficient permissions to perform this action.
     /// 404: Returns an error message if the user with the given ID does not exist.
     /// </returns>
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:guid}")]
     public IActionResult DeleteUser(Guid id)
     {
-        var userMakingRequest = HelperClass.ParseUser(User, _context);
-
-        if (!userMakingRequest.Role.IsAdmin && userMakingRequest.Id != id)
-        {
-            _context.AuditLogs.Add(new AuditLog(HttpContext)
-            {
-                UserId = userMakingRequest.Id,
-                Action = "Unauthorized Delete Attempt",
-                Details =
-                    $"User {userMakingRequest.Id} attempted to delete user with ID {id} without sufficient permissions.",
-                SuspiciousScore =
-                    2 // This will only be triggered if someone tries to delete another user without being an admin. Not an average user action.
-            });
-            _context.SaveChanges();
-            return Unauthorized(new ControlledException("You are not authorized to delete users",
-                ECode.UserController_DeleteUser));
-        }
-
-        if (id == Guid.Empty)
-        {
-            return BadRequest(new ControlledException("Invalid ID", ECode.UserController_DeleteUser));
-        }
 
         try
         {
+            var userMakingRequest = HelperClass.ParseUser(User, _context);
+
+            if (!userMakingRequest.Role.IsAdmin && userMakingRequest.Id != id)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Delete Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to delete user with ID {id} without sufficient permissions.",
+                    SuspiciousScore =
+                        2 // This will only be triggered if someone tries to delete another user without being an admin. Not an average user action.
+                });
+                _context.SaveChanges();
+                return Unauthorized(new ControlledException("You are not authorized to delete users",
+                    ECode.UserController_DeleteUser));
+            }
+
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new ControlledException("Invalid ID", ECode.UserController_DeleteUser));
+            }
+
             var userToDelete = _context.Users.Find(id);
             if (userToDelete == null)
             {

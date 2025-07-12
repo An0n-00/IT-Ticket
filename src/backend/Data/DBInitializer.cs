@@ -1,20 +1,11 @@
 /// <summary>
 /// This class seeds the database with default values when it is created.
 /// </summary>
-public class DbInitializer
+public class DbInitializer(IConfiguration configuration, IServiceProvider serviceProvider)
 {
-    private readonly IConfiguration _configuration;
-    private readonly IServiceProvider _serviceProvider;
-
-    public DbInitializer(IConfiguration configuration, IServiceProvider serviceProvider)
-    {
-        _configuration = configuration;
-        _serviceProvider = serviceProvider;
-    }
-
     public void Run()
     {
-        using var scope = _serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<Context>();
         try
         {
@@ -75,7 +66,7 @@ public class DbInitializer
             Role = adminRole
         };
 
-        var password = _configuration.GetSection("DefaultAdminPassword").Value;
+        var password = configuration.GetSection("DefaultAdminPassword").Value;
         if (password == null)
         {
             throw new FaultyAppsettingsException(FaultyAppsettingsReason.MissingKey,
@@ -87,6 +78,14 @@ public class DbInitializer
         admin.Salt = salt;
 
         context.Users.Add(admin);
+
+        context.Notifications.Add(new Notification()
+        {
+            Message =
+                "Welcome to your local IT-Ticket Instance. With the admin account, you can manage almost everything that happens here.",
+            User = admin
+        });
+        
         context.SaveChanges();
 
         #endregion
@@ -115,7 +114,7 @@ public class DbInitializer
             Description = "This is a test issue created by the DBInitializer.",
             Status = openStatus,
             Priority = highPriority,
-            CreatedDate = DateTime.Now,
+            CreatedAt = DateTime.Now,
             User = admin,
             AssignedTo = admin,
             Comments = new List<Comment>(),
@@ -127,10 +126,16 @@ public class DbInitializer
             },
             AuditLogs = new List<AuditLog>()
         };
+        
+        context.Notifications.Add(new Notification()
+        {
+            Message = "This notification is linked to the test issue.",
+            User = admin,
+            Issue = testIssue
+        });
 
         context.Issues.Add(testIssue);
         context.SaveChanges();
-
         #endregion
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 #region Register DI dependencies
 
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<Context>(options =>
 
     try
     {
-        options.UseSqlServer(defaultDbConnectionString);
+        options.UseSqlServer(defaultDbConnectionString, sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
     }
     catch (Exception e)
     {
@@ -40,6 +41,11 @@ if (allowedOrigins == null || allowedOrigins.Length == 0)
     throw new FaultyAppsettingsException(FaultyAppsettingsReason.MissingKey, "CORS Origins are not configured in appsettings.[Development.|Production.]json. Please do that before running the application.");
 }
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS_CONFIG", cors =>
@@ -50,7 +56,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Initialize JwtHelper
 JwtHelper.Initialize(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
@@ -72,6 +77,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 });
+
+
 
 #endregion
 
