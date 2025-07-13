@@ -47,7 +47,7 @@ public class IssueController(Context context) : ControllerBase
 
 
     /// <summary>
-    /// Get their issues. Admins and support can see all issues, users can only see their own issues.
+    /// Get their issue. Gets a single issue by its ID.
     /// </summary>
     /// <param name="id">The guid of the issue to get</param>
     /// <remarks>
