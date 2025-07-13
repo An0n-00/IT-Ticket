@@ -123,3 +123,10 @@
 *::selection {
     @apply bg-primary-foreground text-primary;
 }
+*::-moz-selection {
+    @apply bg-primary-foreground text-primary;
+}
+
+button:hover {
+    @apply cursor-pointer;
+}

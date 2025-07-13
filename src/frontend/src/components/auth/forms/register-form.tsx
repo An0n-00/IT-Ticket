@@ -1,16 +1,70 @@
 import { GalleryVerticalEnd, LucideCircleUser, LucideLockKeyhole, LucideMail, LucideUser, LucideUserPlus } from 'lucide-react';
-
+import { useState } from 'react';
 import { cn } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth.ts';
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { register } = useAuth();
+    const navigate = useNavigate();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Validate form
+        if (Object.values(formData).some((value) => !value)) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            toast.error('Passwords do not match');
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await register({
+                username: formData.username,
+                password: formData.password,
+                email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+            });
+            toast.success('Registration successful!');
+            // Navigation is handled by the auth context
+        } catch (error) {
+            // Error is already handled by the auth context
+            console.error('Registration error:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center gap-2">
                         <a href="/" className="flex flex-col items-center gap-2 font-medium">
@@ -26,7 +80,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
                                 variant={'link'}
                                 type={'button'}
                                 onClick={() => {
-                                    window.location.href = '/login';
+                                    navigate('/login');
                                 }}
                                 className="h-0 p-0 underline underline-offset-4"
                             >
@@ -36,50 +90,50 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
                     </div>
                     <div className="flex flex-col gap-6">
                         <div className="grid gap-3">
-                            <Label htmlFor="firstname">
+                            <Label htmlFor="firstName">
                                 <LucideUser size={16} />
                                 First Name
                             </Label>
-                            <Input id="firstname" type="text" autoComplete={'given-name'} placeholder="John" required />
+                            <Input id="firstName" type="text" autoComplete={'given-name'} placeholder="John" value={formData.firstName} onChange={handleChange} required />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="lastname">
+                            <Label htmlFor="lastName">
                                 <LucideUser size={16} />
                                 Last Name
                             </Label>
-                            <Input id="lastname" type="text" autoComplete={'family-name'} placeholder="Doe" required />
+                            <Input id="lastName" type="text" autoComplete={'family-name'} placeholder="Doe" value={formData.lastName} onChange={handleChange} required />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="email">
                                 <LucideMail size={16} />
                                 Email
                             </Label>
-                            <Input id="email" type="email" autoComplete={'email'} placeholder="me@example.com" required />
+                            <Input id="email" type="email" autoComplete={'email'} placeholder="me@example.com" value={formData.email} onChange={handleChange} required />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="username">
                                 <LucideCircleUser size={16} />
                                 Username
                             </Label>
-                            <Input id="username" type="text" autoComplete={'username'} placeholder="john_doe" required />
+                            <Input id="username" type="text" autoComplete={'username'} placeholder="john_doe" value={formData.username} onChange={handleChange} required />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="password">
                                 <LucideLockKeyhole size={16} />
                                 Password
                             </Label>
-                            <Input id="password" type="password" autoComplete={'new-password'} placeholder="••••••••" required />
+                            <Input id="password" type="password" autoComplete={'new-password'} placeholder="••••••••" value={formData.password} onChange={handleChange} required />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="confirmPassword">
                                 <LucideLockKeyhole size={16} />
                                 Confirm Password
                             </Label>
-                            <Input id="confirmPassword" type="password" autoComplete={'new-password'} placeholder="••••••••" required />
+                            <Input id="confirmPassword" type="password" autoComplete={'new-password'} placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required />
                         </div>
-                        <Button type="submit" className="w-full">
-                            Register
-                            <LucideUserPlus />
+                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                            {isSubmitting ? 'Registering...' : 'Register'}
+                            {!isSubmitting && <LucideUserPlus />}
                         </Button>
                     </div>
                     <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

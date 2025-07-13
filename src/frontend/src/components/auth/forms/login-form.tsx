@@ -1,17 +1,43 @@
-import { GalleryVerticalEnd, LucideLockKeyhole, LucideLogIn, LucideMail } from 'lucide-react';
-
+import { GalleryVerticalEnd, LucideCircleUser, LucideLockKeyhole, LucideLogIn } from 'lucide-react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth.ts';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!username || !password) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await login(username, password);
+            toast.success('Login successful!');
+        } catch (error) {
+            console.error('Login error:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <>
             <div className={cn('flex flex-col gap-6', className)} {...props}>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col items-center gap-2">
                             <a href="/" className="flex flex-col items-center gap-2 font-medium">
@@ -27,7 +53,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                                     variant={'link'}
                                     type={'button'}
                                     onClick={() => {
-                                        window.location.href = '/register';
+                                        navigate('/register');
                                     }}
                                     className="h-0 p-0 underline underline-offset-4"
                                 >
@@ -37,22 +63,22 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                         </div>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-3">
-                                <Label htmlFor="email">
-                                    <LucideMail size={16} />
-                                    Email
+                                <Label htmlFor="username">
+                                    <LucideCircleUser size={16} />
+                                    Username
                                 </Label>
-                                <Input id="email" type="email" autoComplete={'email'} placeholder="me@example.com" required />
+                                <Input id="username" type="text" autoComplete={'username'} placeholder="john_doe" value={username} onChange={(e) => setUsername(e.target.value)} required />
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="password">
                                     <LucideLockKeyhole size={16} />
                                     Password
                                 </Label>
-                                <Input id="password" type="password" autoComplete={'current-password'} placeholder="••••••••" required />
+                                <Input id="password" type="password" autoComplete={'current-password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
                             </div>
-                            <Button type="submit" className="w-full">
-                                Log in
-                                <LucideLogIn />
+                            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? 'Logging in...' : 'Log in'}
+                                {!isSubmitting && <LucideLogIn />}
                             </Button>
                         </div>
                         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
