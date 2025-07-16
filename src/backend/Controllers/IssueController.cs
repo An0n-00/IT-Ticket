@@ -1,8 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/// <summary>
+/// Handles issue-related operations within the application, including retrieval,
+/// creation, updating, and deletion of issues. Authorization is required for all endpoints.
+/// </summary>
+/// <remarks>
+/// All endpoints in this controller require a valid JSON Web Token (JWT) in the
+/// Authorization header. Access control rules are applied as follows:
+/// - Regular users can access their own issues only.
+/// - Administrators and support personnel may access all issues.
+/// </remarks>
+/// <returns>
+/// 401: If you call any endpoint in this controller without a valid JWT token in the Authorization header.
+/// </returns>
 [Route("/api/[controller]")]
 [Produces("application/json")]
 [ApiController]
