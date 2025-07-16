@@ -2,12 +2,12 @@
 {
     public Guid Id { get; set; }
     public string Content { get; set; } = null!;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public bool IsDeleted { get; set; } = false;
+    public DateTime CreatedAt { get; set; }
+    public bool IsDeleted { get; set; } 
     public DateTime DeletedAt { get; set; }
     public Guid UserId { get; set; }
     public Guid IssueId { get; set; }
     public Guid? ParentCommentId { get; set; }
-    public virtual List<CommentToFrontendDTO> Replies { get; set; }
-    public virtual List<AttachmentToFrontendDTO> Attachments { get; set; } = new List<AttachmentToFrontendDTO>();
+    public virtual List<Guid> Replies { get; set; } = [];
+    public virtual List<Guid> Attachments { get; set; } = [];
 }
