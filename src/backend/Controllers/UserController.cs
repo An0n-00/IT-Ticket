@@ -287,6 +287,99 @@ public class UserController(Context context) : ControllerBase
     }
 
     /// <summary>
+    /// Elevate or demote a user to/from any role.
+    /// </summary>
+    /// <remarks>
+    /// Route: /api/user/{id}/elevate
+    /// Method: POST
+    /// Consumes: application/json
+    /// Produces: application/json
+    /// </remarks>
+    /// <param name="id">The unique identifier of the user to be elevated or demoted.</param>
+    /// <param name="roleId">The unique identifier of the role to which the user should be elevated or demoted.</param>
+    /// <returns>
+    /// 200: Returns the updated user details after elevation or demotion.
+    /// 400: Returns an error message if the ID is invalid or an exception occurs.
+    /// 401: Returns an error if the user making the request is not authenticated or does not have sufficient permissions.
+    /// 404: Returns an error if the user to elevate or demote is not found.
+    /// </returns>
+    [HttpPost("{id:guid}/elevate")]
+    public IActionResult ElevateUser(Guid id, Guid roleId)
+    {
+        try
+        {
+            var userMakingRequest = HelperClass.ParseUser(User, _context);
+
+            if (!userMakingRequest.Role.IsAdmin)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Elevate/Demote Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to elevate/demote user with ID {id} without sufficient permissions.",
+                    SuspiciousScore = 3
+                });
+                _context.SaveChanges();
+                return Unauthorized(new ControlledException(
+                    "You are not authorized to elevate/demote users. Your actions have been logged.",
+                    ECode.UserController_ElevateUser));
+            }
+
+            if (id == Guid.Empty || roleId == Guid.Empty)
+            {
+                return BadRequest(new ControlledException("Invalid ID or Role ID", ECode.UserController_ElevateUser));
+            }
+
+            var userToElevate = _context.Users.Find(id);
+            if (userToElevate == null)
+            {
+                return NotFound(new ControlledException("User with the given ID was not found",
+                    ECode.UserController_ElevateUser));
+            }
+
+            var role = _context.Roles.Find(roleId);
+            if (role == null)
+            {
+                return BadRequest(new ControlledException("Role with the given ID was not found",
+                    ECode.UserController_ElevateUser));
+            }
+
+            if (role.IsAdmin && !userMakingRequest.Role.IsAdmin)
+            {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    User = userMakingRequest,
+                    Action = "Unauthorized Elevate to Admin Attempt",
+                    Details =
+                        $"User {userMakingRequest.Id} attempted to elevate user {id} to admin role without sufficient permissions.",
+                    SuspiciousScore = 4 // Higher score for attempted admin elevation
+                });
+                _context.SaveChanges();
+                return Unauthorized(new ControlledException(
+                    "You are not authorized to elevate users to admin role. Your actions have been logged.",
+                    ECode.UserController_ElevateUser));
+            }
+
+            _context.AuditLogs.Add(new AuditLog(HttpContext)
+            {
+                User = userMakingRequest,
+                Action = "Elevate/Demote User",
+                Details = $"User {userMakingRequest.Id} elevated/demoted user {id} to role {roleId}.",
+                SuspiciousScore = 1
+            });
+            userToElevate.Role = role;
+            _context.SaveChanges();
+
+            return Ok(Mapper.ToUserDto(userToElevate.Id, _context));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new ControlledException(e.Message, ECode.UserController_ElevateUser));
+        }
+    }
+
+    /// <summary>
     /// Suspends a user by their ID, marking them as suspended in the system.
     /// </summary>
     /// <remarks>
@@ -379,7 +472,6 @@ public class UserController(Context context) : ControllerBase
     [Route("{id:guid}")]
     public IActionResult DeleteUser(Guid id)
     {
-
         try
         {
             var userMakingRequest = HelperClass.ParseUser(User, _context);

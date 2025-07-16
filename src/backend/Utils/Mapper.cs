@@ -69,5 +69,35 @@ public static class Mapper
             Attachments = issue.Attachments?.Select(a => a.Id).ToList(),
             Notifications = issue.Notifications?.Select(n => n.Id).ToList(),
         };
-    } 
+    }
+
+    public static CommentToFrontendDTO ToCommentDto(Guid commentId, Context context)
+    {
+        var comment = context.Comments
+            .Include(c => c.User)
+            .Include(c => c.Issue)
+            .Include(c => c.ParentComment)
+            .Include(c => c.Replies)
+            .Include(c => c.Attachments)
+            .FirstOrDefault(c => c.Id == commentId);
+        
+        if (comment == null) 
+        {
+            throw new ControlledException("Comment not found", ECode.CommentController_GetCommentById);
+        }
+        
+        return new CommentToFrontendDTO
+        {
+            Id = comment.Id,
+            Content = comment.Content,
+            CreatedAt = comment.CreatedAt,
+            IsDeleted = comment.isDeleted,
+            DeletedAt = comment.DeletedAt,
+            UserId = comment.User.Id,
+            IssueId = comment.Issue.Id,
+            ParentCommentId = comment.ParentCommentId,
+            Replies = comment.Replies.Select(r => r.Id).ToList() ?? [],
+            Attachments = comment.Attachments?.Select(a => a.Id).ToList() ?? []
+        };
+    }
 }
