@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 /// <summary>
 /// This class represents a Tag entity in the system.
@@ -20,7 +21,9 @@ public class Tag
 /// </summary>
 public class IssueTag
 {
+    [JsonIgnore]
     public Guid IssueId { get; set; }
+    [JsonIgnore]
     public virtual Issue Issue { get; set; }
 
     public Guid TagId { get; set; }
