@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { ModeToggle as ThemeToggle } from '@/components/ui/theme-toggle';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, HelpCircle, Home, LucideLogIn, LucideMenu, LucideUserPlus2, TicketIcon, Users } from 'lucide-react';
@@ -50,6 +50,7 @@ interface HeaderProps {
 
 export function Header({ id }: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleScrollToSection = (sectionId: string) => {
         const element = document.getElementById(sectionId);
@@ -57,7 +58,7 @@ export function Header({ id }: HeaderProps) {
             setMobileMenuOpen(false);
             element.scrollIntoView({ behavior: 'smooth' });
         } else if (sectionId === 'hero') {
-            window.location.href = '/';
+            navigate('/');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
