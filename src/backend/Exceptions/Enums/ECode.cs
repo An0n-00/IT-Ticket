@@ -26,14 +26,14 @@ public enum ECode
     [Description("Get user by ID")]
     UserController_GetUserById = 2001,
     
-    [Description("Create a new user")]
-    UserController_CreateUser = 2002,
-    
     [Description("Update an existing user")]
     UserController_UpdateUser = 2003,
     
     [Description("Delete a user")]
     UserController_DeleteUser = 2004,
+    
+    [Description("Suspend a user")]
+    UserController_SuspendUser,
     
     [Description("User login")]
     UserController_Login = 2005,
@@ -62,6 +62,9 @@ public enum ECode
     [Description("Role is null")]
     AuthController_CreateToken = 2012,
     
+    [Description("Elevate user role")]
+    UserController_ElevateUser = 2013,
+    
     [Description("Faulty appsettings configuration")]
     Appsettings_Faulty = 3000,
     
@@ -72,6 +75,10 @@ public enum ECode
     Database_InitializationError = 4002,
     
     [Description("Unknown Database error")]
-    Database_UnknownError = 4003
+    Database_UnknownError = 4003,
+    
+    [Description("Get comment by ID")]
+    CommentController_GetCommentById = 5000
+    
     
 }

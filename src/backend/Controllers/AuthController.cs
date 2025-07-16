@@ -6,11 +6,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol;
 
+/// <summary>
+/// The `AuthController` handles authentication-related operations such as login and user registration.
+/// </summary>
+/// <remarks>
+/// All routes in this controller are prefixed with `/auth/api`.
+/// This controller processes requests and returns responses in JSON format.
+/// </remarks>
+/// <param name="context">Context for database operations.</param>
 [Route("/auth/api")]
 [Produces("application/json")]
 [ApiController]
 public class AuthController(Context context) : ControllerBase
 {
+    private readonly Context _context = context;
+
     /// <summary>
     /// This endpoint is used to login a user.
     /// </summary>
@@ -23,67 +33,81 @@ public class AuthController(Context context) : ControllerBase
     /// <param name="loginDto">The login data transfer object containing the username and password.</param>
     /// <returns>
     /// 200: Returns a JWT token with user details if login is successful.
-    /// 400: Returns an error message if the login fails, such as incorrect username or password.
+    /// 400: Returns an error message if the login fails, such as an incorrect username or password.
     /// </returns>
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO loginDto)
     {
-        User? userInDb = context.Users.Include(user => user.Role).FirstOrDefault(u => u.Username == loginDto.Username);
+        User? userInDb = _context.Users.Include(user => user.Role).FirstOrDefault(u => u.Username == loginDto.Username && !u.IsDeleted);
         
         if (userInDb == null)
         {
-            context.AuditLogs.Add(new AuditLog
+            _context.AuditLogs.Add(new AuditLog(HttpContext)
             {
-                UserId = null,
                 Action = "Login Attempt",
-                Details = $"Users with username {loginDto.Username} attempted to log in but does not exist."
+                Details = $"User with username {loginDto.Username} attempted to log in but does not exist.",
+                IsSystemAction = true
             });
-            context.SaveChanges();
+            _context.SaveChanges();
             return BadRequest(new ControlledException("Username and/or Password is wrong", ECode.UserController_Login));
         }
         
-        context.AuditLogs.Add(new AuditLog
+        if (userInDb.IsSuspended)
         {
-            UserId = userInDb?.Id,
+            _context.AuditLogs.Add(new AuditLog(HttpContext)
+            {
+                User = userInDb,
+                Action = "Login Attempt",
+                Details = $"User {userInDb.Id} attempted to log in but is suspended.",
+                SuspiciousScore = 0
+            });
+            _context.SaveChanges();
+            return StatusCode(403, new ControlledException("Your account is suspended. Please contact support.", ECode.UserController_Login));
+        }
+        
+        _context.AuditLogs.Add(new AuditLog(HttpContext)
+        {
+            User = userInDb,
             Action = "Login Attempt",
-            Details = $"Users {userInDb!.Username} attempted to log in with username: {loginDto.Username}."
+            Details = $"User {userInDb.Id} attempted to log in with username: {loginDto.Username}.",
         });
-        context.SaveChanges();
+        _context.SaveChanges();
 
         if (HashGenerator.VerifyHash(userInDb.Password, loginDto.Password, userInDb.Salt))
         {
             try
             {
                 var token = CreateToken(userInDb.Id, userInDb.Username, userInDb.Role);
-                context.AuditLogs.Add(new AuditLog
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = userInDb.Id,
+                    User = userInDb,
                     Action = "Login Success",
-                    Details = $"Users {userInDb.Username} logged in successfully."
+                    Details = $"User {userInDb.Id} logged in successfully."
                 });
-                context.SaveChanges();
+                _context.SaveChanges();
                 return Ok(token);
             }
             catch (Exception e)
             {
-                context.AuditLogs.Add(new AuditLog
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = userInDb.Id,
+                    User = userInDb,
                     Action = "Login Failed",
-                    Details = $"Users {userInDb.Username} failed to login: {e.Message}"
+                    Details = $"User {userInDb.Id} failed to login: {e.Message}",
                 });
-                context.SaveChanges();
-                return BadRequest(e.ToJson());
+                _context.SaveChanges();
+                return BadRequest(new ControlledException(e.Message, ECode.UserController_Login));
             }
         }
 
-        context.AuditLogs.Add(new AuditLog
+        _context.AuditLogs.Add(new AuditLog(HttpContext)
         {
-            UserId = userInDb.Id,
+            User = userInDb,
             Action = "Login Failed",
-            Details = $"Users {userInDb.Username} failed to log in with the tried credentials."
+            Details = $"User {userInDb.Id} failed to log in with the tried credentials.",
+            SuspiciousScore = 1
         });
-        context.SaveChanges();
+        _context.SaveChanges();
 
         return BadRequest(new ControlledException("Username and/or Password is wrong", ECode.UserController_Login));
     }
@@ -116,19 +140,21 @@ public class AuthController(Context context) : ControllerBase
             // check if the email is valid
             if (!HelperClass.IsValidEmail(registerDto.Email))
             {
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
+                {
+                    Action = "Registration Attempt",
+                    Details = $"User with email {registerDto.Email} attempted to register but provided an invalid email.",
+                    IsSystemAction = true,
+                    SuspiciousScore = 2 // suspicious cause email checks are already done in the frontend. If someone tries to register with an invalid email, it is likely a bot or malicious user.
+                });
+                _context.SaveChanges();
                 return BadRequest(new ControlledException("Please enter a valid email address", ECode.UserController_Register));
             }
 
             // check against special characters in the username
-            if (!HelperClass.IsValidUsername(registerDto.Username))
+            if (!HelperClass.IsValidUsername(registerDto.Username, _context))
             {
-                return BadRequest(new ControlledException("Do not use special characters in your username", ECode.UserController_Register));
-            }
-            
-            // check if the username already exists
-            if (context.Users.Any(u => u.Username == registerDto.Username))
-            {
-                return BadRequest(new ControlledException("Username already exists", ECode.UserController_Register));
+                return BadRequest(new ControlledException("Invalid Username. Someone might be using it already, or it contains special characters", ECode.UserController_Register));
             }
             
             var newUser = new User
@@ -137,49 +163,49 @@ public class AuthController(Context context) : ControllerBase
                 Email = registerDto.Email,
                 Firstname = registerDto.FirstName,
                 Lastname = registerDto.LastName,
-                RoleId = context.Roles.FirstOrDefault(r => r.IsDefault == true)?.Id ?? throw new ControlledException("Default user role not found", ECode.UserController_Register),
+                RoleId = _context.Roles.FirstOrDefault(r => r.IsDefault == true)?.Id ?? throw new ControlledException("Default user role not found", ECode.UserController_Register),
                 Issues = new List<Issue>(),
             };
 
             var pwHash = HashGenerator.GenerateHash(registerDto.Password, out var salt);
             newUser.Password = pwHash;
             newUser.Salt = salt;
-            context.Users.Add(newUser);
-            context.SaveChanges();
-            context.AuditLogs.Add(new AuditLog
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+            _context.AuditLogs.Add(new AuditLog(HttpContext)
             {
-                UserId = newUser.Id,
-                Action = "Users Registration",
-                Details = $"Users {newUser.Username} registered successfully."
+                User = newUser,
+                Action = "User Registration",
+                Details = $"User {newUser.Id} registered successfully."
             });
-            context.Notifications.Add(new Notification
+            _context.Notifications.Add(new Notification
             {
-                UserId = newUser.Id,
-                Message = "Welcome to IT-Ticket! Your account has been created successfully."
+                User = newUser,
+                Message = "Welcome to IT-Ticket! Your account has been created successfully. Feel free to read the documentation to get started.",
             });
-            context.SaveChanges();
+            _context.SaveChanges();
             try
             {
                 var token = CreateToken(newUser.Id, newUser.Username, newUser.Role);
-                context.AuditLogs.Add(new AuditLog
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = newUser.Id,
+                    User = newUser,
                     Action = "Token Creation",
-                    Details = $"Users {newUser.Username} created a token successfully."
+                    Details = $"User {newUser.Id} created a token successfully."
                 });
-                context.SaveChanges();
+                _context.SaveChanges();
                 return Ok(token);
             }
             catch (Exception e)
             {
-                context.AuditLogs.Add(new AuditLog
+                _context.AuditLogs.Add(new AuditLog(HttpContext)
                 {
-                    UserId = newUser.Id,
+                    User = newUser,
                     Action = "Token Creation Failed",
-                    Details = $"Users {newUser.Username} failed to create a token."
+                    Details = $"User {newUser.Id} failed to create a token."
                 });
-                context.SaveChanges();
-                return BadRequest(e.ToJson());
+                _context.SaveChanges();
+                return BadRequest(new ControlledException(e.Message, ECode.UserController_Register));
             }
         }
         catch (Exception e)
@@ -200,9 +226,7 @@ public class AuthController(Context context) : ControllerBase
             {
                 Subject = new ClaimsIdentity([
                     new Claim(ClaimTypes.SerialNumber, Convert.ToString(userId) ?? throw new ControlledException("UserId is null when creating the token", ECode.AuthController_CreateToken)),
-                    new Claim(ClaimTypes.Name, username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.Role, role.ToString() ?? throw new ControlledException("Roles is null", ECode.AuthController_CreateToken))
                 ]),
                 Expires = expires,
                 Issuer = JwtHelper.ValidIssuer,
