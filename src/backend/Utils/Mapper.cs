@@ -100,4 +100,27 @@ public static class Mapper
             Attachments = comment.Attachments?.Select(a => a.Id).ToList() ?? []
         };
     }
+    
+    public static NotificationToFrontendDTO ToNotificationDto(Guid notificationId, Context context)
+    {
+        var notification = context.Notifications
+            .Include(n => n.User)
+            .FirstOrDefault(n => n.Id == notificationId);
+        
+        if (notification == null) 
+        {
+            throw new ControlledException("Notification not found", ECode.NotificationController_GetNotificationById);
+        }
+        
+        return new NotificationToFrontendDTO
+        {
+            Id = notification.Id,
+            UserId = notification.User.Id,
+            Message = notification.Message,
+            CreatedAt = notification.CreatedAt,
+            IsRead = notification.IsRead,
+            IssueId = notification.IssueId,
+            ReadAt = notification.ReadAt
+        };
+    }
 }

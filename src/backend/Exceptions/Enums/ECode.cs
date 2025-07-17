@@ -78,7 +78,26 @@ public enum ECode
     Database_UnknownError = 4003,
     
     [Description("Get comment by ID")]
-    CommentController_GetCommentById = 5000
+    CommentController_GetCommentById = 5000,
+    
+    [Description("Create a new comment")]
+    CommentController_CreateComment = 5001,
+    
+    [Description("Update an existing comment")]
+    CommentController_UpdateComment = 5002,
+    
+    [Description("Delete a comment")]
+    CommentController_DeleteComment = 5003,
+    
+    [Description("Get notification by ID")]
+    NotificationController_GetNotificationById = 6000,
+    
+    [Description("Get a users notifications")]
+    NotificationController_GetNotification = 6001,
+    
+    [Description("Read a notification")]
+    NotificationController_ReadNotification = 6002,
+    
     
     
 }
