@@ -123,4 +123,22 @@ public static class Mapper
             ReadAt = notification.ReadAt
         };
     }
+
+    public static PriorityToFrontendDTO ToPriorityDto(Guid priorityId, Context context)
+    {
+        var priority = context.Priorities.FirstOrDefault(p => p.Id == priorityId);
+
+        if (priority == null)
+        {
+            throw new ControlledException("Priority not found", ECode.PriorityController_GetPriorityById);
+        }
+
+        return new PriorityToFrontendDTO
+        {
+            Id = priority.Id,
+            Name = priority.Name,
+            Description = priority.Description,
+            Color = priority.Color.ToLower()
+        };
+    }
 }

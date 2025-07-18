@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 /// <param name="context">The database context used for accessing comment data.</param>
 /// <remarks>
 /// This controller provides endpoints for managing comment-related data.
-/// Functionalities could include creating, retrieving, updating, or deleting comments.
+/// Functionalities include creating, retrieving, updating, and deleting comments.
 /// </remarks>
 /// <returns>
 /// 401: When requested without a valid Bearer token.
