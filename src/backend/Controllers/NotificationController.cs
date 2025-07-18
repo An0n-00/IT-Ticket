@@ -1,6 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// NotificationController handles API operations related to notifications.
+/// </summary>
+/// <param name="context">The database context used for accessing notification-related data.</param>
+/// <remarks>
+/// This controller provides endpoints for managing notification-related data.
+/// Functionalities include creating, retrieving, updating, and deleting notifications.
+/// </remarks>
+/// <returns>
+/// 401: When requested without a valid Bearer token.
+/// </returns>
 [Route("/api/[controller]")]
 [Produces("application/json")]
 [ApiController]
@@ -50,6 +61,7 @@ public class NotificationController(Context context) : ControllerBase
     /// <summary>
     /// Gets all Notifications for the current user.
     /// </summary>
+    /// <param name="isRead">A query parameter (bool) that indicates whether the notification should ONLY be the non read</param>
     /// <remarks>
     /// Route: /api/notification
     /// Method: GET
@@ -57,8 +69,8 @@ public class NotificationController(Context context) : ControllerBase
     /// Produces: application/json
     /// </remarks>
     /// <returns>
-    /// 200: Returns a list of Notifications for the current user.
-    /// 400: If the ID is invalid or if an error occurs while retrieving the Notifications.
+    /// 200: Returns a list of Notification ID for the current user.
+    /// 400: Returns a Bad Request if any error occurs
     /// </returns>
     [HttpGet]
     public IActionResult GetNotifications([FromQuery] Boolean? isRead = false)

@@ -98,6 +98,11 @@ public enum ECode
     [Description("Read a notification")]
     NotificationController_ReadNotification = 6002,
     
+    [Description("Get all priorities")]
+    PriorityController_GetAllPriorities = 7000,
+    
+    [Description("Get all priorities")]
+    PriorityController_GetPriorityById = 7001,
     
     
 }
