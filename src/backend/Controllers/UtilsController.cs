@@ -8,7 +8,7 @@ public class UtilsController : ControllerBase
     [HttpGet("ping")]
     public IActionResult Ping()
     {
-        return Ok(new { message = "pong" });
+        return Ok(new { message = "pong", time = DateTime.UtcNow });
     }
     
     [HttpGet("/")]
