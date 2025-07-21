@@ -10,7 +10,7 @@ public static class Mapper
             .Include(u => u.Role)
             .Include(u => u.Notifications)
             .FirstOrDefault(u => u.Id == userId);
-        
+
         return new UserToFrontendDTO
         {
             Id = userToMap!.Id,
@@ -29,10 +29,10 @@ public static class Mapper
             SuspendedAt = userToMap.SuspendedAt
         };
     }
-    
+
     public static IssueToFrontendDTO ToIssueDto(Guid issueId, Context context)
     {
-        
+
         var issue = context.Issues
             .Include(i => i.User)
             .Include(i => i.AssignedTo)
@@ -49,7 +49,7 @@ public static class Mapper
         {
             throw new ControlledException("Issue not found", ECode.IssueController_GetIssueById);
         }
-        
+
         return new IssueToFrontendDTO
         {
             Id = issue.Id,
@@ -80,12 +80,12 @@ public static class Mapper
             .Include(c => c.Replies)
             .Include(c => c.Attachments)
             .FirstOrDefault(c => c.Id == commentId);
-        
-        if (comment == null) 
+
+        if (comment == null)
         {
             throw new ControlledException("Comment not found", ECode.CommentController_GetCommentById);
         }
-        
+
         return new CommentToFrontendDTO
         {
             Id = comment.Id,
@@ -100,18 +100,18 @@ public static class Mapper
             Attachments = comment.Attachments?.Select(a => a.Id).ToList() ?? []
         };
     }
-    
+
     public static NotificationToFrontendDTO ToNotificationDto(Guid notificationId, Context context)
     {
         var notification = context.Notifications
             .Include(n => n.User)
             .FirstOrDefault(n => n.Id == notificationId);
-        
-        if (notification == null) 
+
+        if (notification == null)
         {
             throw new ControlledException("Notification not found", ECode.NotificationController_GetNotificationById);
         }
-        
+
         return new NotificationToFrontendDTO
         {
             Id = notification.Id,
@@ -139,6 +139,23 @@ public static class Mapper
             Name = priority.Name,
             Description = priority.Description,
             Color = priority.Color.ToLower()
+        };
+    }
+
+    public static RoleToFrontendDTO ToRoleDto(Guid roleId, Context context)
+    {
+        var role = context.Roles.FirstOrDefault(r => r.Id == roleId);
+
+        if (role == null)
+        {
+            throw new ControlledException("Role not found", ECode.RoleController_GetRole);
+        }
+
+        return new RoleToFrontendDTO
+        {
+            Id = role.Id,
+            Name = role.Name,
+            Description = role.Description
         };
     }
 }
