@@ -4,6 +4,8 @@ updates:
     directory: "/src/frontend"
     schedule:
       interval: "weekly"
+    target-branch: "2-frontend"
+    open-pull-requests-limit: 20
     labels:
       - "📦dependencies"
       - "🛠️npm"
@@ -17,6 +19,8 @@ updates:
     directory: "/src/backend" 
     schedule:
       interval: "weekly"
+    target-branch: "3-implement-all-controllers"
+    open-pull-requests-limit: 20
     labels:
       - "📦dependencies"
       - "💻csharp"

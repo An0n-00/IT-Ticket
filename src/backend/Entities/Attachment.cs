@@ -13,6 +13,8 @@ public class Attachment
     public string FileName { get; set; }
     public byte[] FileContent { get; set; }
     public DateTime UploadedAt { get; set; } = DateTime.Now;
+    public bool IsDeleted { get; set; } = false;
+    public DateTime DeletedAt { get; set; }
 
     public Guid UploadedById { get; set; }
     public virtual User UploadedBy { get; set; }
