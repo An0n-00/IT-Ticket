@@ -477,7 +477,7 @@ public class IssueController(Context context) : ControllerBase
                 }
                 
                 issueToDelete.IsDeleted = true;
-                issueToDelete.DeletedAt = DateTime.Now;
+                issueToDelete.DeletedAt = DateTime.UtcNow;
                 
                 _context.Issues.Update(issueToDelete);
                 
