@@ -57,7 +57,7 @@ public class DbInitializer(IConfiguration configuration, IServiceProvider servic
 
         #endregion
 
-        #region Create Default Admin Users
+        #region Create Default Admin User
 
         var admin = new User
         {

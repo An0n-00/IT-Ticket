@@ -17,8 +17,8 @@ info:
     name: IT-Ticket Development Team
     url: https://github.com/An0n-00/IT-Ticket
   license:
-    name: CC BY-NC-SA 4.0
-    url: https://opensource.org/licenses/CC_BY-NC-SA_4.0
+    name: Custom
+    url: https://github.com/An0n-00/IT-Ticket/blob/main/LICENSE
 
 servers:
   - url: http://localhost:3001
