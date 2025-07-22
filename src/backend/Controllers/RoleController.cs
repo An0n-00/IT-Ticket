@@ -12,6 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 /// It is not intended for creating or deleting roles.
 /// It is secured with authorization to ensure that only authenticated users can access the role information.
 /// </remarks>
+/// <returns>
+/// 401: Unauthorized access if the user is not authenticated.
+/// 404: Not found if the role does not exist.
+/// 500: Internal server error if an unexpected error occurs.
+/// </returns>
 [Route("/api/[controller]")]
 [Produces("application/json")]
 [ApiController]
