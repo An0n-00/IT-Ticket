@@ -123,4 +123,10 @@ public enum ECode
     [Description("Get a tag by ID")]
     TagController_GetTagById = 10001,
 
+    [Description("Get all audit logs")]
+    AuditLogController_GetAllAuditLogs = 11000,
+
+    [Description("Get an audit log by ID")]
+    AuditLogController_GetAuditLogById = 11001
+
 }

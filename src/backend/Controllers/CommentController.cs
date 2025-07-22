@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 /// </remarks>
 /// <returns>
 /// 401: When requested without a valid Bearer token.
-/// </returns>>
+/// </returns>
 [Route("/api/[controller]")]
 [Produces("application/json")]
 [ApiController]

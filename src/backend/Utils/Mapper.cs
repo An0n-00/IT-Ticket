@@ -193,4 +193,31 @@ public static class Mapper
             Description = tag.Description,
         };
     }
+
+    public static AuditLogToFrontendDTO ToAuditLogDto(Guid auditLogId, Context context)
+    {
+        var auditLog = context.AuditLogs
+            .Include(a => a.User)
+            .Include(a => a.Issue)
+            .FirstOrDefault(a => a.Id == auditLogId);
+
+        if (auditLog == null)
+        {
+            throw new ControlledException("Audit log not found", ECode.AuditLogController_GetAuditLogById);
+        }
+
+        return new AuditLogToFrontendDTO
+        {
+            Id = auditLog.Id,
+            UserId = auditLog.User.Id,
+            IssueId = auditLog.Issue.Id,
+            Action = auditLog.Action,
+            CreatedAt = auditLog.CreatedAt,
+            Details = auditLog.Details,
+            IpAddress = auditLog.IpAddress,
+            UserAgent = auditLog.UserAgent,
+            RequestPath = auditLog.RequestPath,
+            RequestMethod = auditLog.RequestMethod
+        };
+    }
 }
