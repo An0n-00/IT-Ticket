@@ -158,4 +158,22 @@ public static class Mapper
             Description = role.Description
         };
     }
+
+    public static StatusToFrontendDTO ToStatusDto(Guid statusId, Context context)
+    {
+        var status = context.Status.FirstOrDefault(s => s.Id == statusId);
+
+        if (status == null)
+        {
+            throw new ControlledException("Status not found", ECode.StatusController_GetStatusById);
+        }
+
+        return new StatusToFrontendDTO
+        {
+            Id = status.Id,
+            Name = status.Name,
+            Description = status.Description,
+            Color = status.Color.ToLower()
+        };
+    }
 }

@@ -108,6 +108,12 @@ public enum ECode
     RoleController_GetAllRoles = 8000,
 
     [Description("Get a role by ID")]
-    RoleController_GetRole = 8001
+    RoleController_GetRole = 8001,
+
+    [Description("Get all statuses")]
+    StatusController_GetAllStatuses = 9000,
+
+    [Description("Get a status by ID")]
+    StatusController_GetStatusById = 9001
 
 }
