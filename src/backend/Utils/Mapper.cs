@@ -210,14 +210,16 @@ public static class Mapper
         {
             Id = auditLog.Id,
             UserId = auditLog.User.Id,
-            IssueId = auditLog.Issue.Id,
+            IssueId = auditLog.Issue?.Id ?? null,
             Action = auditLog.Action,
             CreatedAt = auditLog.CreatedAt,
             Details = auditLog.Details,
             IpAddress = auditLog.IpAddress,
             UserAgent = auditLog.UserAgent,
             RequestPath = auditLog.RequestPath,
-            RequestMethod = auditLog.RequestMethod
+            RequestMethod = auditLog.RequestMethod,
+            IsSystemAction = auditLog.IsSystemAction,
+            SuspiciousScore = auditLog.SuspiciousScore
         };
     }
 }

@@ -7,10 +7,10 @@ public class AuditLog
 
     public AuditLog(HttpContext httpContext)
     {
-        IpAddress = httpContext.Connection.RemoteIpAddress?.ToString();
-        UserAgent = httpContext.Request.Headers["User-Agent"];
-        RequestPath = httpContext.Request.Path;
-        RequestMethod = httpContext.Request.Method;
+        IpAddress = httpContext?.Connection.RemoteIpAddress?.ToString() ?? "no value";
+        UserAgent = httpContext?.Request.Headers["User-Agent"] ?? "no value";
+        RequestPath = httpContext?.Request.Path ?? "no value";
+        RequestMethod = httpContext?.Request.Method ?? "no value";
     }
 
     [Key]
