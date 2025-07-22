@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 /// <param name="context">The database context used for accessing comment data.</param>
 /// <remarks>
 /// This controller provides endpoints for managing comment-related data.
-/// Functionalities could include creating, retrieving, updating, or deleting comments.
+/// Functionalities include creating, retrieving, updating, and deleting comments.
 /// </remarks>
 /// <returns>
 /// 401: When requested without a valid Bearer token.
-/// </returns>>
-[Route("/api/comment")]
+/// </returns>
+[Route("/api/[controller]")]
 [Produces("application/json")]
 [ApiController]
 [Authorize]
@@ -70,38 +70,33 @@ public class CommentController(Context context) : ControllerBase
     /// Produces: application/json
     /// </remarks>
     /// <returns>
-    /// 200: Returns the comment with the specified ID.
+    /// 200: Returns the created comment data as a DTO.
     /// 400: If any error occurs while creating the comment, such as invalid data or database issues.
     /// </returns>
-    public IActionResult CreateComment(Guid id, [FromBody] CommentDTO commentDto)
+    public IActionResult CreateComment([FromBody] CommentDTO commentDto)
     {
         try
         {
             var userMakingRequest = HelperClass.ParseUser(User, _context);
 
-            if (id == Guid.Empty)
-            {
-                throw new ControlledException("Invalid issue id", ECode.IssueController_GetIssueById);
-            }
-
-            if (_context.Issues.Find(id) == null)
-            {
-                return NotFound(new ControlledException("Issue not found", ECode.IssueController_GetIssueById));
-            }
-
             if (commentDto == null)
             {
-                throw new ControlledException("Comment data is required", ECode.IssueController_CreateIssue);
+                throw new ControlledException("Comment data is required", ECode.CommentController_CreateComment);
+            }
+            
+            if (commentDto.IssueId == Guid.Empty || !_context.Issues.Any(i => i.Id == commentDto.IssueId))
+            {
+                throw new ControlledException("Invalid or non-existent issue ID", ECode.CommentController_CreateComment);
             }
 
             if (string.IsNullOrWhiteSpace(commentDto.Content))
             {
-                throw new ControlledException("Comment content cannot be empty", ECode.IssueController_CreateIssue);
+                throw new ControlledException("Comment content cannot be empty", ECode.CommentController_CreateComment);
             }
 
             var comment = new Comment
             {
-                IssueId = id,
+                IssueId = commentDto.IssueId,
                 Content = commentDto.Content,
                 User = userMakingRequest,
             };
@@ -111,7 +106,7 @@ public class CommentController(Context context) : ControllerBase
                 var parentComment = _context.Comments.Find(commentDto.ParentCommentId);
                 if (parentComment == null)
                 {
-                    return NotFound(new ControlledException("Parent comment not found", ECode.IssueController_CreateIssue));
+                    return NotFound(new ControlledException("Parent comment not found", ECode.CommentController_CreateComment));
                 }
                 comment.ParentComment = parentComment;
             }
@@ -123,7 +118,7 @@ public class CommentController(Context context) : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(new ControlledException(e.Message, ECode.IssueController_CreateIssue));
+            return BadRequest(new ControlledException(e.Message, ECode.CommentController_CreateComment));
         }
     }
     
@@ -153,13 +148,13 @@ public class CommentController(Context context) : ControllerBase
 
             if (id == Guid.Empty)
             {
-                return BadRequest(new ControlledException("Invalid comment ID", ECode.CommentController_GetCommentById));
+                return BadRequest(new ControlledException("Invalid comment ID", ECode.CommentController_UpdateComment));
             }
 
             var commentToUpdate = _context.Comments.Include(c => c.User).FirstOrDefault(c => c.Id == id);
             if (commentToUpdate == null)
             {
-                return NotFound(new ControlledException("Comment not found", ECode.CommentController_GetCommentById));
+                return NotFound(new ControlledException("Comment not found", ECode.CommentController_UpdateComment));
             }
 
             // Only the comment owner or admin/support can update
@@ -174,7 +169,7 @@ public class CommentController(Context context) : ControllerBase
                     SuspiciousScore = 2
                 });
                 _context.SaveChanges();
-                return Unauthorized(new ControlledException("You are not authorized to update this comment", ECode.CommentController_GetCommentById));
+                return Unauthorized(new ControlledException("You are not authorized to update this comment", ECode.CommentController_UpdateComment));
             }
 
             if (!string.IsNullOrWhiteSpace(commentDto.Content))
@@ -196,7 +191,7 @@ public class CommentController(Context context) : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(new ControlledException(e.Message, ECode.CommentController_GetCommentById));
+            return BadRequest(new ControlledException(e.Message, ECode.CommentController_UpdateComment));
         }
     }
 
@@ -225,13 +220,13 @@ public class CommentController(Context context) : ControllerBase
 
             if (id == Guid.Empty)
             {
-                return BadRequest(new ControlledException("Invalid comment ID", ECode.CommentController_GetCommentById));
+                return BadRequest(new ControlledException("Invalid comment ID", ECode.CommentController_DeleteComment));
             }
 
             var commentToDelete = _context.Comments.Include(c => c.User).FirstOrDefault(c => c.Id == id);
             if (commentToDelete == null)
             {
-                return NotFound(new ControlledException("Comment not found", ECode.CommentController_GetCommentById));
+                return NotFound(new ControlledException("Comment not found", ECode.CommentController_DeleteComment));
             }
 
             // Only the comment owner or admin/support can delete
@@ -246,7 +241,7 @@ public class CommentController(Context context) : ControllerBase
                     SuspiciousScore = 2
                 });
                 _context.SaveChanges();
-                return Unauthorized(new ControlledException("You are not authorized to delete this comment", ECode.CommentController_GetCommentById));
+                return Unauthorized(new ControlledException("You are not authorized to delete this comment", ECode.CommentController_DeleteComment));
             }
 
             commentToDelete.isDeleted = true;
@@ -267,7 +262,7 @@ public class CommentController(Context context) : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(new ControlledException(e.Message, ECode.CommentController_GetCommentById));
+            return BadRequest(new ControlledException(e.Message, ECode.CommentController_DeleteComment));
         }
     }
 }
