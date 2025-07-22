@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Humanizer;
 
 /// <summary>
 /// Enum representing various error codes for controlled exceptions.
@@ -114,6 +115,12 @@ public enum ECode
     StatusController_GetAllStatuses = 9000,
 
     [Description("Get a status by ID")]
-    StatusController_GetStatusById = 9001
+    StatusController_GetStatusById = 9001,
+
+    [Description("Get all tags")]
+    TagController_GetAllTags = 10000,
+
+    [Description("Get a tag by ID")]
+    TagController_GetTagById = 10001,
 
 }

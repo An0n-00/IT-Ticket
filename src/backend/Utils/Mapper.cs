@@ -176,4 +176,21 @@ public static class Mapper
             Color = status.Color.ToLower()
         };
     }
+
+    public static TagToFrontendDTO ToTagDto(Guid tagId, Context context)
+    {
+        var tag = context.Tags.FirstOrDefault(t => t.Id == tagId);
+
+        if (tag == null)
+        {
+            throw new ControlledException("Tag not found", ECode.TagController_GetTagById);
+        }
+
+        return new TagToFrontendDTO
+        {
+            Id = tag.Id,
+            Name = tag.Name,
+            Description = tag.Description,
+        };
+    }
 }
