@@ -73,7 +73,8 @@ public class CommentController(Context context) : ControllerBase
     /// 200: Returns the created comment data as a DTO.
     /// 400: If any error occurs while creating the comment, such as invalid data or database issues.
     /// </returns>
-    public IActionResult CreateComment([FromBody] CommentDTO commentDto)
+    [HttpPost]
+    public IActionResult CreateComment(Guid id, [FromBody] CommentDTO commentDto)
     {
         try
         {
