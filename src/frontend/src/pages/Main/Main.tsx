@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { ModeToggle as ThemeToggle } from '@/components/ui/theme-toggle';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import RotatingText from '@/components/bits/textanimations/RotatingText/RotatingText.tsx';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import FeatureCards from '@/components/main/FeatureCards.tsx';
 
 export default function Main() {
     const hash = window.location.hash.replace('#', '');
@@ -46,9 +47,10 @@ export default function Main() {
 
 interface HeaderProps {
     id?: string;
+    shadow?: boolean;
 }
 
-export function Header({ id }: HeaderProps) {
+export function Header({ id = 'header', shadow = true }: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -64,8 +66,10 @@ export function Header({ id }: HeaderProps) {
     };
 
     return (
-        <header id={id} className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
-            <div className="container flex h-16 items-center justify-between px-3">
+        <header id={id} className="sticky top-0 z-50 h-0 w-auto">
+            <div
+                className={`supports-[backdrop-filter]:bg-background/60 border-b-primary sticky z-50 container mx-4 mt-4 flex h-16 w-auto items-center justify-between rounded-2xl px-3 backdrop-blur ${shadow ? 'shadow-lg' : ''}`}
+            >
                 <div className="flex items-center gap-2">
                     <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
                         <img src={green_logo} alt="IT-Ticket Logo" className="h-8 w-auto" />
@@ -163,8 +167,8 @@ interface IdProps {
 
 function Hero({ id }: IdProps) {
     return (
-        <section id={id} className="px-4 py-16 md:px-6 md:py-20 lg:py-32">
-            <div className="container mx-auto flex flex-col items-center text-center">
+        <section id={id} className="relative container mx-auto flex flex-col items-center px-4 py-16 text-center md:px-6 md:py-20 lg:py-32">
+            <div className="z-1 container mx-auto mt-8 flex flex-col items-center text-center sm:mt-16">
                 <Badge className="mb-4 animate-pulse">In Beta β</Badge>
                 <h1 className="mb-6 flex flex-wrap items-center justify-center gap-2 text-3xl font-bold tracking-tight md:text-4xl lg:text-6xl">
                     <div className="inline-flex">
@@ -204,6 +208,18 @@ function Hero({ id }: IdProps) {
                     <div className="bg-background border-primary/20 relative rounded-lg border p-2 shadow-xl transition-all duration-300 md:p-3">
                         <img src={dashboard_pic} alt="IT-Ticket Dashboard Preview" className="h-auto w-full rounded-md" loading="lazy" />
                     </div>
+                </div>
+            </div>
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute -top-48 -left-48 h-120 w-120">
+                    <div className="bg-primary/30 absolute inset-0 rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute inset-8 rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute inset-16 rounded-full blur-[64px]"></div>
+                </div>
+                <div className="absolute -right-48 -bottom-48 h-120 w-120">
+                    <div className="bg-primary/30 absolute inset-0 rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute inset-8 rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute inset-16 rounded-full blur-[64px]"></div>
                 </div>
             </div>
         </section>
@@ -255,26 +271,7 @@ function Features({ id }: FeaturesProps) {
                     <h2 className="mb-2 text-2xl font-bold tracking-tight md:mb-4 md:text-3xl">Powerful Features</h2>
                     <p className="text-muted-foreground mx-auto max-w-[800px] text-sm md:text-xl">Everything you need to manage IT support requests efficiently and effectively.</p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    {features.map((feature, index) => (
-                        <Card key={index} className="hover:border-primary/50 border-muted border transition-all duration-300 md:border-2">
-                            <CardHeader className="p-4 md:p-6">
-                                <div className="mb-2 flex">{feature.icon}</div>
-                                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
-                                    {feature.title}
-                                    {feature.title === 'SLA Compliance' && (
-                                        <Badge variant="secondary" className="ml-2 text-xs">
-                                            Coming soon
-                                        </Badge>
-                                    )}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-                                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                <FeatureCards features={features} />
             </div>
         </section>
     );
@@ -313,7 +310,7 @@ function Testimonials({ id }: TestimonialsProps) {
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3 md:gap-8">
                     {testimonials.map((testimonial, index) => (
-                        <Card key={index} className="bg-muted/30">
+                        <Card key={index} className="bg-muted/30 border-primary/20 shadow-primary/20 transition-all duration-300 hover:shadow-xl">
                             <CardContent className="p-4 md:p-6">
                                 <div className="mb-2 text-3xl md:mb-4 md:text-4xl">"</div>
                                 <p className="mb-4 text-sm italic md:mb-6 md:text-base">{testimonial.quote}</p>
@@ -347,7 +344,7 @@ function CTA({ id }: CTAProps) {
                     <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
                         <Link to={'/login'}>Use this Instance</Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="text-secondary-foreground w-full sm:w-auto" asChild>
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
                         <Link to="https://github.com/An0n-00/IT-Ticket">Host your own Instance for Free</Link>
                     </Button>
                 </div>
@@ -363,7 +360,7 @@ interface FooterProps {
 
 function Footer({ id, scrollToSection }: FooterProps) {
     return (
-        <footer id={id} className="bg-muted py-8 md:py-12">
+        <footer id={id} className="bg-secondary py-8 md:py-12">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="mb-6 grid grid-cols-2 gap-6 md:mb-8 md:grid-cols-4 md:gap-8">
                     <div className="col-span-2 md:col-span-1">

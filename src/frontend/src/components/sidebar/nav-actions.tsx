@@ -1,7 +1,7 @@
-import { IconCirclePlusFilled, IconDashboard } from '@tabler/icons-react';
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { LayoutDashboard, LucidePlusCircle } from 'lucide-react';
 
 export default function NavActions() {
     return (
@@ -19,14 +19,14 @@ export default function NavActions() {
                                 });
                             }}
                         >
-                            <IconCirclePlusFilled />
+                            <LucidePlusCircle />
                             <span>New Ticket</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem className="flex items-center gap-2">
                         <SidebarMenuButton asChild>
                             <Link to={'/dashboard'}>
-                                <IconDashboard />
+                                <LayoutDashboard />
                                 Dashboard
                             </Link>
                         </SidebarMenuButton>

@@ -1,5 +1,4 @@
-import { BadgeCheck, Bell, LucideHelpCircle } from 'lucide-react';
-import { IconDotsVertical } from '@tabler/icons-react';
+import { BadgeCheck, Bell, LucideEllipsisVertical, LucideHelpCircle } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar.tsx';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu.tsx';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar.tsx';
@@ -16,13 +15,15 @@ export function NavUser({
         avatar: string;
     };
 }) {
-    const { isMobile } = useSidebar();
+    const { open, isMobile } = useSidebar();
 
     return (
         <SidebarMenu>
+            <SidebarMenuItem className={`flex p-2 text-sm font-medium ${open ? 'w-full' : 'm-0 p-0'}`}>
+                <ModeToggle wide={open} className={`${open ? 'w-full' : 'h-8 w-8'}`} />
+            </SidebarMenuItem>
             <SidebarMenuItem>
                 <div className="flex w-full items-center gap-2">
-                    <ModeToggle />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
@@ -33,7 +34,7 @@ export function NavUser({
                                     <span className="truncate font-medium">{user.name}</span>
                                     <span className="truncate text-xs">{user.email}</span>
                                 </div>
-                                <IconDotsVertical className="ml-auto size-4" />
+                                <LucideEllipsisVertical />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" side={isMobile ? 'bottom' : 'right'} align="end" sideOffset={4}>

@@ -15,54 +15,54 @@ export default function App() {
                 <AuthProvider>
                     <Routes>
                         {/* Public routes that redirect to dashboard if authenticated */}
-                        <Route 
-                            path="/" 
+                        <Route
+                            path="/"
                             element={
                                 <ProtectedRoute requireAuth={false}>
                                     <Main />
                                 </ProtectedRoute>
-                            } 
+                            }
                         />
-                        <Route 
-                            path="/login" 
+                        <Route
+                            path="/login"
                             element={
                                 <ProtectedRoute requireAuth={false}>
                                     <LoginPage />
                                 </ProtectedRoute>
-                            } 
+                            }
                         />
-                        <Route 
-                            path="/register" 
+                        <Route
+                            path="/register"
                             element={
                                 <ProtectedRoute requireAuth={false}>
                                     <RegisterPage />
                                 </ProtectedRoute>
-                            } 
+                            }
                         />
 
                         {/* Protected routes that require authentication */}
-                        <Route 
-                            path="/dashboard" 
+                        <Route
+                            path="/dashboard"
                             element={
                                 <ProtectedRoute>
                                     <DashboardPage />
                                 </ProtectedRoute>
-                            } 
+                            }
                         />
 
                         {/* 404 that redirects to dashboard if authenticated */}
-                        <Route 
-                            path="*" 
+                        <Route
+                            path="*"
                             element={
                                 <ProtectedRoute requireAuth={false}>
                                     <NotFound />
                                 </ProtectedRoute>
-                            } 
+                            }
                         />
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>
-            <Toaster />
+            <Toaster closeButton richColors visibleToasts={5} />
         </>
     );
 }

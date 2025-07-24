@@ -1,11 +1,13 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import type { User, AuthProviderProps, AuthContextType, RegisterData } from '@/types/auth.ts';
+import type { AuthContextType, AuthProviderProps, RegisterData, User } from '@/types/auth.ts';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // API base URL
+// eslint-disable-next-line react-refresh/only-export-components
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -73,7 +75,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             const userDetails = await userDetailsResponse.json();
             setUser(userDetails);
-        } catch (error: Error | any) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+        } catch (error: Error) {
             console.error('Error fetching user data:', error);
             toast.error(error.message || 'Failed to fetch user data');
             setError('Failed to fetch user data');
@@ -99,7 +103,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                toast.error(errorData.message || 'Login failed');
                 throw new Error(errorData.message || 'Login failed');
             }
 

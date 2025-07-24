@@ -46,11 +46,11 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
         try {
             setIsSubmitting(true);
             await register({
-                username: formData.username,
-                password: formData.password,
-                email: formData.email,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
+                username: formData.username.trim(),
+                password: formData.password.trim(),
+                email: formData.email.trim(),
+                firstName: formData.firstName.trim(),
+                lastName: formData.lastName.trim(),
             });
             toast.success('Registration successful!');
             // Navigation is handled by the auth context
