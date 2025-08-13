@@ -1,16 +1,7 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
-interface Feature {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-}
-
-interface FeatureCardsProps {
-    features: Feature[];
-}
+import type { FeatureCardsProps } from '@/types/home.ts';
 
 export default function FeatureCards({ features }: FeatureCardsProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

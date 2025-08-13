@@ -12,7 +12,7 @@ public class Comment
     public string Content { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public bool isDeleted { get; set; } = false;
-    public DateTime DeletedAt { get; set; }
+    public DateTime DeletedAt { get; set; } = DateTime.MinValue;
 
     public Guid UserId { get; set; }
     public virtual User User { get; set; }

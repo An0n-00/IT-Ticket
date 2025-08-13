@@ -155,7 +155,10 @@ public static class Mapper
         {
             Id = role.Id,
             Name = role.Name,
-            Description = role.Description
+            Description = role.Description,
+            IsAdmin = role.IsAdmin,
+            IsDefault = role.IsDefault,
+            IsSupport = role.IsSupport
         };
     }
 

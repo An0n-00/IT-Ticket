@@ -7,6 +7,7 @@ The backend API for the IT-Ticket system - a comprehensive IT ticket management 
 </div>
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
@@ -57,12 +58,14 @@ The IT-Ticket backend provides a RESTful API for managing IT support tickets, us
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/An0n-01/IT-Ticket.git
    cd IT-Ticket/src/backend
    ```
 
 2. **Restore NuGet packages**
+
    ```bash
    dotnet restore
    ```
@@ -75,11 +78,12 @@ The IT-Ticket backend provides a RESTful API for managing IT support tickets, us
 ## Configuration
 
 1. **Copy the example configuration**
+
    ```bash
    cp appsettings.json.example appsettings.json
    ```
 
-2. **Update the configuration file** (`appsettings.json`)
+2. **Update the configuration file** ([`appsettings.json`](./appsettings.json.example))
    - Set your database connection string
    - Configure CORS origins for your frontend
    - Set a secure JWT signing key (minimum 64 characters)
@@ -112,19 +116,25 @@ The application uses Entity Framework Code First migrations. The database will b
 
 ## Running the Application
 
+> [!CAUTION]
+> Do not skip the [`configuring`](#configuration). It won't work propperly otherwise. Also make sure that the backend and database is running and accessable.
+
 Make sure that you have set up the [configuration](#configuration) correctly, that the database is running, and the connection string in `appsettings.json` is correctly configured.
 
 ### Development
+
 ```bash
 dotnet run
 ```
 
 ### Production
+
 ```bash
 dotnet run --environment Production
 ```
 
 The API will be available at:
+
 - HTTP: `http://localhost:3001`
 - HTTPS: `https://localhost:3001`
 
@@ -135,10 +145,12 @@ Find the whole API documentation in the [OpenApi.yaml file](./openapi.yaml).
 The API follows RESTful conventions with the following base structure:
 
 ### Authentication Endpoints
+
 - `POST /auth/api/login` - User login
 - `POST /auth/api/register` - User registration
 
 ### Protected Endpoints (Require JWT Token)
+
 - `/api/user/*` - User management
 - `/api/issue/*` - Issue tracking
 - `/api/comment/*` - Comment management
@@ -152,15 +164,18 @@ The API follows RESTful conventions with the following base structure:
 ### Example API Calls
 
 **Login**
+
 ```bash
 curl -X POST http://localhost:3001/auth/api/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"Administrator","password":"admin123"}'  
+  -d '{"username":"Administrator","password":"admin123"}'
 ```
+
 > [!CAUTION]
 > This is actually the default admin user and password, you **should** change the username and password in `appsettings.json`.
 
 **Create Issue**
+
 ```bash
 curl -X POST http://localhost:3001/api/issue \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -182,16 +197,16 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9...
 ### Default Users
 
 The system creates default users on first run:
-- **Admin**: `Administrator` / `admin123` (or your configured password)
-For any additional users, you can register via the API.
 
-> [!CAUTION]
-> **⚠️ Change these passwords in production!**
+- **Admin**: `Administrator` / `admin123` (or your configured password)
+  For any additional users, you can register via the API.
+
+> [!CAUTION] > **⚠️ Change these passwords in production!**
 
 ## Project Structure
 
 ```
-src/backend/
+src/
 ├── Controllers/           # API controllers
 │   ├── AuthController.cs
 │   ├── UserController.cs
@@ -202,7 +217,6 @@ src/backend/
 │   └── Models/
 ├── DTOs/                  # Data Transfer Objects
 ├── Helpers/               # Utility classes
-├── Migrations/            # EF Core migrations
 ├── appsettings.json       # Configuration
 └── Program.cs             # Application entry point
 ```
@@ -210,22 +224,16 @@ src/backend/
 ## Development
 
 ### Code Style
+
 - Follow C# naming conventions
 - Use XML documentation for public APIs
 - Implement proper error handling with `ControlledException`
 - Add audit logging for sensitive operations
 
-### Adding New Features
-1. Create/update entity models in `Data/Models/`
-2. Add database migrations if needed
-3. Create DTOs for data transfer
-4. Implement controller endpoints
-5. Add proper authorization attributes
-6. Update this documentation
-
 ## Security
 
 ### Security Features
+
 - **JWT Authentication**: Secure token-based authentication
 - **Role-Based Authorization**: Admin, Support, and User roles
 - **Input Validation**: Comprehensive validation and sanitization
@@ -235,6 +243,7 @@ src/backend/
 - **Password Hashing**: Secure password storage with salt
 
 ### Security Best Practices
+
 - Use HTTPS in production
 - Set a strong JWT signing key (64+ characters)
 - Regularly rotate JWT signing keys
@@ -243,7 +252,9 @@ src/backend/
 - Use environment variables for sensitive configuration
 
 ### Audit Logging
+
 The system automatically logs:
+
 - User authentication attempts
 - Data modifications
 - Permission violations
@@ -259,6 +270,7 @@ The system automatically logs:
 6. Create a Pull Request
 
 ### Contribution Guidelines
+
 - Follow existing code style and patterns
 - Add appropriate error handling and logging
 - Update documentation for API changes
@@ -268,10 +280,11 @@ The system automatically logs:
 ## Support
 
 For support and questions:
+
 - Create an issue on GitHub
 - Check the API documentation
 - Review the audit logs for troubleshooting
 
 ---
 
-**Note**: This is the backend API component. For the complete system setup, refer to the main repository README. For the frontend, system setup, reffer to the frontend repository README.
+**Note**: This is the backend API component. For the complete system setup, refer to [the main README](../../README.md). For the frontend reffer to [the frontend README](../frontend/README.md).

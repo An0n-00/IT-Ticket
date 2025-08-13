@@ -615,13 +615,6 @@ paths:
         - Notifications
       summary: Get user notifications
       description: Returns notification IDs for the current user
-      parameters:
-        - name: isRead
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: Filter by read status. If not provided, returns all notifications
       responses:
         '200':
           description: List of notification IDs

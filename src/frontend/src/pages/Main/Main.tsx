@@ -5,7 +5,7 @@ import { ModeToggle as ThemeToggle } from '@/components/ui/theme-toggle';
 import { Link, useNavigate } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, HelpCircle, Home, LucideLogIn, LucideMenu, LucideUserPlus2, TicketIcon, Users } from 'lucide-react';
+import { CheckCircle, Clock, HelpCircle, Home, LogInIcon, LucideLogIn, LucideMenu, LucideUserPlus2, Server, TicketIcon, Users } from 'lucide-react';
 import green_logo from '@/public/logo-green.svg';
 import dashboard_pic from '@/public/dashboard.png';
 import { useCallback, useState } from 'react';
@@ -89,8 +89,8 @@ export function Header({ id = 'header', shadow = true }: HeaderProps) {
                                     }}
                                 >
                                     <div className={'flex items-center gap-2'}>
-                                        <Home className="h-4 w-4" />
                                         <span>Home</span>
+                                        <Home className="h-4 w-4" />
                                     </div>
                                 </Link>
                             </NavigationMenuLink>
@@ -99,8 +99,8 @@ export function Header({ id = 'header', shadow = true }: HeaderProps) {
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                                 <Link to="https://github.com/An0n-00/IT-Ticket#:~:text=documentation%20is%20incomplete" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                                     <div className={'flex items-center gap-2'}>
-                                        <HelpCircle className="h-4 w-4" />
                                         <span>Help</span>
+                                        <HelpCircle className="h-4 w-4" />
                                     </div>
                                 </Link>
                             </NavigationMenuLink>
@@ -167,7 +167,7 @@ interface IdProps {
 
 function Hero({ id }: IdProps) {
     return (
-        <section id={id} className="relative container mx-auto flex flex-col items-center px-4 py-16 text-center md:px-6 md:py-20 lg:py-32">
+        <section id={id} className="relative container mx-auto flex flex-col items-center px-4 py-16 text-center">
             <div className="z-1 container mx-auto mt-8 flex flex-col items-center text-center sm:mt-16">
                 <Badge className="mb-4 animate-pulse">In Beta β</Badge>
                 <h1 className="mb-6 flex flex-wrap items-center justify-center gap-2 text-3xl font-bold tracking-tight md:text-4xl lg:text-6xl">
@@ -178,7 +178,7 @@ function Hero({ id }: IdProps) {
                             staggerFrom={'last'}
                             staggerDuration={0.025}
                             splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1 "
-                            rotationInterval={3500}
+                            rotationInterval={3000}
                         />
                     </div>
                     <span className="ml-2">Your IT Support with</span>
@@ -192,14 +192,16 @@ function Hero({ id }: IdProps) {
                     platform.
                 </p>
                 <div className="flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
-                    <Button size="lg" className="group relative w-full overflow-hidden rounded-md sm:w-auto" asChild>
-                        <Link to="/login">
-                            <span className="relative z-10">Get Started</span>
-                        </Link>
-                    </Button>
                     <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
                         <Link target="_blank" rel="noopener noreferrer" to="https://github.com/An0n-00/IT-Ticket">
                             Host it yourself
+                            <Server />
+                        </Link>
+                    </Button>
+                    <Button size="lg" className="group relative w-full overflow-hidden rounded-md sm:w-auto" asChild>
+                        <Link to="/login">
+                            <span className="relative z-10">Get Started</span>
+                            <LogInIcon />
                         </Link>
                     </Button>
                 </div>
@@ -211,15 +213,15 @@ function Hero({ id }: IdProps) {
                 </div>
             </div>
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                <div className="absolute -top-48 -left-48 h-120 w-120">
-                    <div className="bg-primary/30 absolute inset-0 rounded-full blur-[128px]"></div>
-                    <div className="bg-primary/20 absolute inset-8 rounded-full blur-[96px]"></div>
-                    <div className="bg-primary/10 absolute inset-16 rounded-full blur-[64px]"></div>
+                <div className="absolute top-0 left-0 h-full w-full">
+                    <div className="bg-primary/60 absolute -top-48 -left-48 h-[40vw] max-h-[600px] min-h-[300px] w-[40vw] max-w-[600px] min-w-[300px] rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute -top-32 -left-32 h-[30vw] max-h-[400px] min-h-[200px] w-[30vw] max-w-[400px] min-w-[200px] rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute -top-16 -left-16 h-[20vw] max-h-[200px] min-h-[100px] w-[20vw] max-w-[200px] min-w-[100px] rounded-full blur-[64px]"></div>
                 </div>
-                <div className="absolute -right-48 -bottom-48 h-120 w-120">
-                    <div className="bg-primary/30 absolute inset-0 rounded-full blur-[128px]"></div>
-                    <div className="bg-primary/20 absolute inset-8 rounded-full blur-[96px]"></div>
-                    <div className="bg-primary/10 absolute inset-16 rounded-full blur-[64px]"></div>
+                <div className="absolute right-0 bottom-0 h-full w-full">
+                    <div className="bg-primary/60 absolute -right-48 -bottom-48 h-[40vw] max-h-[600px] min-h-[300px] w-[40vw] max-w-[600px] min-w-[300px] rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute -right-32 -bottom-32 h-[30vw] max-h-[400px] min-h-[200px] w-[30vw] max-w-[400px] min-w-[200px] rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute -right-16 -bottom-16 h-[20vw] max-h-[200px] min-h-[100px] w-[20vw] max-w-[200px] min-w-[100px] rounded-full blur-[64px]"></div>
                 </div>
             </div>
         </section>
@@ -344,7 +346,7 @@ function CTA({ id }: CTAProps) {
                     <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
                         <Link to={'/login'}>Use this Instance</Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
+                    <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
                         <Link to="https://github.com/An0n-00/IT-Ticket">Host your own Instance for Free</Link>
                     </Button>
                 </div>
