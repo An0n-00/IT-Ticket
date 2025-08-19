@@ -7,7 +7,8 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, HelpCircle, Home, LogInIcon, LucideLogIn, LucideMenu, LucideUserPlus2, Server, TicketIcon, Users } from 'lucide-react';
 import green_logo from '@/public/logo-green.svg';
-import dashboard_pic from '@/public/dashboard.png';
+import dashboard_pic_dark from '@/public/dashboard.png';
+import dashboard_pic_light from '@/public/dashboard_light.png';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import RotatingText from '@/components/bits/textanimations/RotatingText/RotatingText.tsx';
@@ -208,7 +209,8 @@ function Hero({ id }: IdProps) {
                 <div className="relative mt-12 w-full max-w-[1000px] md:mt-16">
                     <div className="from-primary to-primary/20 absolute -inset-1 rounded-lg bg-gradient-to-r opacity-75 blur-md"></div>
                     <div className="bg-background border-primary/20 relative rounded-lg border p-2 shadow-xl transition-all duration-300 md:p-3">
-                        <img src={dashboard_pic} alt="IT-Ticket Dashboard Preview" className="h-auto w-full rounded-md" loading="lazy" />
+                        <img src={dashboard_pic_dark} alt="IT-Ticket Dashboard Preview" className="h-auto w-full rounded-md" loading="lazy" />
+                        <img src={dashboard_pic_light} alt="IT-Ticket Dashboard Preview" className="absolute top-0 left-0 h-full w-full rounded-md dark:hidden" loading="lazy" />
                     </div>
                 </div>
             </div>
