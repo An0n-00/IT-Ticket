@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-test:
+  update-packages:
     runs-on: ubuntu-latest
     defaults:
       run:
