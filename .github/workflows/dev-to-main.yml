@@ -33,7 +33,6 @@ jobs:
           echo "Head repo: $HEAD_REPO"
           echo "Repository: $REPO"
           echo "Event type: $EVENT_TYPE"
-
           # Only run validation for PRs that are not closed/merged
           if [[ "$EVENT_TYPE" != "closed" ]]; then
             if [[ "$BASE_BRANCH" != "main" || "$HEAD_BRANCH" != "dev" || "$HEAD_REPO" != "$REPO" ]]; then
@@ -55,3 +54,4 @@ jobs:
             else
               echo "✅ Pull request is valid (Dev → Main)."
             fi
+          fi
