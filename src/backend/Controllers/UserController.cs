@@ -389,7 +389,7 @@ public class UserController(Context context) : ControllerBase
     /// Produces: application/json
     /// </remarks>
     /// <param name="id">The unique identifier of the user to be suspended.</param>
-    /// <param name="suspend">A boolean indicating whether to suspend (true) or unsuspend (false) the user. Defaults to true.</param>
+    /// <param name="suspendUserDto">A DTO containing the suspension details.</param>
     /// <returns>
     /// 200: Returns the details of the suspended user.
     /// 400: Returns an error message if the ID is invalid or an exception occurs.
@@ -397,7 +397,7 @@ public class UserController(Context context) : ControllerBase
     /// 404: Returns an error if the user to suspend is not found.
     /// </returns>
     [HttpPost("{id:guid}/suspend")]
-    public IActionResult SuspendUser(Guid id, [FromBody] Boolean suspend)
+    public IActionResult SuspendUser(Guid id, [FromBody] SuspendUserDTO suspendUserDto)
     {
         try
         {
@@ -432,7 +432,7 @@ public class UserController(Context context) : ControllerBase
                     ECode.UserController_SuspendUser));
             }
 
-            if (suspend)
+            if (suspendUserDto.IsSuspended)
             {
                 userToSuspend.IsSuspended = true;
                 userToSuspend.SuspendedAt = DateTime.UtcNow;

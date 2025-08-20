@@ -57,7 +57,7 @@ public class DbInitializer(IConfiguration configuration, IServiceProvider servic
 
         #endregion
 
-        #region Create Default Admin Users
+        #region Create Default Admin User
 
         var admin = new User
         {
@@ -137,5 +137,13 @@ public class DbInitializer(IConfiguration configuration, IServiceProvider servic
         context.Issues.Add(testIssue);
         context.SaveChanges();
         #endregion
+        
+        context.AuditLogs.Add(new AuditLog(null)
+        {
+            Action = "Database Initialized",
+            Details = "The database has been initialized with default roles, statuses, tags, and a test issue.",
+            IsSystemAction = true,
+        });
     }
+    
 }
