@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: "weekly"
     target-branch: "2-frontend"
-    open-pull-requests-limit: 20
     labels:
       - "📦dependencies"
       - "🛠️npm"
@@ -14,13 +13,12 @@ updates:
       - "An0n-00"
     commit-message:
       prefix: "[dependabot - npm] "
-      
-  - package-ecosystem: "nuget" 
-    directory: "/src/backend" 
+
+  - package-ecosystem: "nuget"
+    directory: "/src/backend"
     schedule:
       interval: "weekly"
     target-branch: "3-implement-all-controllers"
-    open-pull-requests-limit: 20
     labels:
       - "📦dependencies"
       - "💻csharp"

@@ -1,0 +1,57 @@
+name: Only allow PRs from Dev to Main
+
+on:
+  pull_request:
+    branches: [main]
+    types:
+      - opened
+      - reopened
+      - synchronize
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Check if PR is from Dev to Main
+        run: |
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+          HEAD_REPO="${{ github.event.pull_request.head.repo.full_name }}"
+          REPO="${{ github.repository }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          EVENT_TYPE="${{ github.event.action }}"
+          IS_MERGED="${{ github.event.pull_request.merged }}"
+
+          echo "Base branch: $BASE_BRANCH"
+          echo "Head branch: $HEAD_BRANCH"
+          echo "Head repo: $HEAD_REPO"
+          echo "Repository: $REPO"
+          echo "Event type: $EVENT_TYPE"
+          # Only run validation for PRs that are not closed/merged
+          if [[ "$EVENT_TYPE" != "closed" ]]; then
+            if [[ "$BASE_BRANCH" != "main" || "$HEAD_BRANCH" != "dev" || "$HEAD_REPO" != "$REPO" ]]; then
+              echo "::error::Only Pull Requests from 'dev' to 'main' in the same repository are allowed."
+              COMMENT="This pull request has been automatically closed because it is not from 'dev' to 'main' or from the same repository."
+              # Comment on the PR
+              curl -X POST \
+                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -d '{"body":"'"$COMMENT"'"}' \
+                "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
+
+              # Close the PR
+              curl -X PATCH \
+                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -d '{"state": "closed"}' \
+                "https://api.github.com/repos/$REPO/pulls/$PR_NUMBER"
+
+              exit 1
+            else
+              echo "✅ Pull request is valid (Dev → Main)."
+            fi
+          fi
