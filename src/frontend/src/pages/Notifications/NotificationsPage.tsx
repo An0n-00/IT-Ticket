@@ -13,7 +13,6 @@ import { Bell, Calendar, Check, CheckCircle2, Mail, MailOpen, X } from 'lucide-r
 import { toast } from 'sonner';
 import apiService from '@/lib/api';
 import type { Notification } from '@/types/api';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 const NotificationsPage: React.FC = () => {
@@ -194,7 +193,7 @@ const NotificationsPage: React.FC = () => {
                                                             <p className={cn('mt-1 text-sm', notification.isRead ? 'text-muted-foreground' : 'text-foreground')}>{notification.message}</p>
                                                             <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
                                                                 <Calendar className="h-3 w-3" />
-                                                                {format(new Date(notification.createdAt), 'MMM dd, yyyy - HH:mm')}
+                                                                {new Date(notification.createdAt).toLocaleDateString()}
                                                             </div>
                                                         </div>
                                                     </div>

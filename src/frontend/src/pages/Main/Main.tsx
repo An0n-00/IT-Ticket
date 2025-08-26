@@ -288,17 +288,17 @@ interface TestimonialsProps {
 function Testimonials({ id }: TestimonialsProps) {
     const testimonials = [
         {
-            quote: 'IT-Ticket has transformed how we handle IT support requests. Our response times have improved by 45%.',
+            quote: 'IT-Ticket has transformed how we handle IT support requests. Our response times have <b>improved by 45%.</b>',
             author: 'Sarah Johnson',
             role: 'IT Director, Acme Corp',
         },
         {
-            quote: "The intuitive interface and powerful features make IT-Ticket the best ticketing system we've ever used.",
+            quote: "The <b>intuitive interface and powerful features</b> make IT-Ticket the best ticketing system we've ever used.",
             author: 'Michael Chen',
             role: 'Help Desk Manager, Tech-Solutions',
         },
         {
-            quote: "We've reduced our ticket resolution time by 30% since implementing IT-Ticket. Highly recommended!",
+            quote: "We've <b>reduced our ticket resolution time by 30%</b> since implementing IT-Ticket. Highly recommended!",
             author: 'Emily Rodriguez',
             role: 'CIO, NexGen Tech Management Solutions',
         },
@@ -316,8 +316,7 @@ function Testimonials({ id }: TestimonialsProps) {
                     {testimonials.map((testimonial, index) => (
                         <Card key={index} className="bg-muted/30 border-primary/20 shadow-primary/20 transition-all duration-300 hover:shadow-xl">
                             <CardContent className="p-4 md:p-6">
-                                <div className="mb-2 text-3xl md:mb-4 md:text-4xl">"</div>
-                                <p className="mb-4 text-sm italic md:mb-6 md:text-base">{testimonial.quote}</p>
+                                <div className="mb-2 text-3xl md:mb-4 md:text-3xl" dangerouslySetInnerHTML={{ __html: testimonial.quote }}></div>
                                 <div>
                                     <p className="text-sm font-semibold md:text-base">{testimonial.author}</p>
                                     <p className="text-muted-foreground text-xs md:text-sm">{testimonial.role}</p>
@@ -346,10 +345,16 @@ function CTA({ id }: CTAProps) {
                 </p>
                 <div className="flex w-full flex-col justify-center gap-4 sm:flex-row">
                     <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
-                        <Link to={'/login'}>Use this Instance</Link>
+                        <Link to={'/login'}>
+                            Use this Instance
+                            <LogInIcon />
+                        </Link>
                     </Button>
                     <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
-                        <Link to="https://github.com/An0n-00/IT-Ticket">Host your own Instance for Free</Link>
+                        <Link to="https://github.com/An0n-00/IT-Ticket">
+                            Host your own Instance for Free
+                            <Server />
+                        </Link>
                     </Button>
                 </div>
             </div>

@@ -17,7 +17,6 @@ import { Activity, AlertTriangle, Calendar, CheckCircle, Edit, Eye, Filter, Info
 import { toast } from 'sonner';
 import apiService from '@/lib/api';
 import type { AuditLog, UserWithRole } from '@/types/api';
-import { format } from 'date-fns';
 
 const AuditLogsPage: React.FC = () => {
     const { user, token, role } = useAuth();
@@ -265,7 +264,7 @@ const AuditLogsPage: React.FC = () => {
                                                     <TableCell>
                                                         <div>
                                                             <div className="font-medium">{log.entityType}</div>
-                                                            <div className="text-muted-foreground text-sm">ID: {log.entityId.substring(0, 8)}...</div>
+                                                            <div className="text-muted-foreground text-sm">ID: {log.entityId}...</div>
                                                         </div>
                                                     </TableCell>
                                                     <TableCell>
@@ -279,7 +278,7 @@ const AuditLogsPage: React.FC = () => {
                                                     <TableCell>
                                                         <div className="flex items-center gap-1 text-sm">
                                                             <Calendar className="text-muted-foreground h-3 w-3" />
-                                                            <span>{format(new Date(log.timestamp), 'MMM dd, HH:mm')}</span>
+                                                            <span>{new Date(log.timestamp).toLocaleDateString()}</span>
                                                         </div>
                                                     </TableCell>
                                                     <TableCell>
@@ -327,11 +326,11 @@ const AuditLogsPage: React.FC = () => {
                                     </div>
                                     <div>
                                         <Label className="text-sm font-medium">User ID</Label>
-                                        <p className="mt-1 font-mono text-sm text-xs break-all">{selectedLog.userId}</p>
+                                        <p className="mt-1 font-mono text-sm break-all">{selectedLog.userId}</p>
                                     </div>
                                     <div className="col-span-2">
                                         <Label className="text-sm font-medium">Timestamp</Label>
-                                        <p className="mt-1 text-sm">{format(new Date(selectedLog.timestamp), 'PPpp')}</p>
+                                        <p className="mt-1 text-sm">{new Date(selectedLog.timestamp).toLocaleDateString()}</p>
                                     </div>
                                 </div>
 

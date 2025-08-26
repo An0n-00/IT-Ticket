@@ -30,8 +30,8 @@ export function NavUser({ user }: NavUserProps) {
 
     return (
         <SidebarMenu>
-            <SidebarMenuItem className={`flex p-2 text-sm font-medium ${open ? 'w-full' : 'm-0 p-0'}`}>
-                <ModeToggle wide={open} className={`${open ? 'w-full' : 'h-8 w-8'}`} />
+            <SidebarMenuItem className={`flex text-sm font-medium ${open ? 'w-full' : 'm-0 p-0'}`}>
+                <ModeToggle wide={open} className={`${open ? 'mb-0 w-full' : 'mb-2 h-8 w-8'}`} />
             </SidebarMenuItem>
             <SidebarMenuItem>
                 <div className="flex w-full items-center gap-2">

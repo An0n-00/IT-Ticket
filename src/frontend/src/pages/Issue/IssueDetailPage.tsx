@@ -131,6 +131,9 @@ const IssueDetailPage: React.FC = () => {
             setNewComment('');
             toast.success('Comment added successfully');
         } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            toast.error(error);
             console.error('Failed to add comment:', error);
         }
     };

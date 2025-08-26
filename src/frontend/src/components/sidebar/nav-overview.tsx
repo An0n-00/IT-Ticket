@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Bell, BellRing, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import apiService from '@/lib/api';
+import { toast } from 'sonner';
 
 export function NavOverview() {
     const { token } = useAuth();
@@ -46,6 +47,9 @@ export function NavOverview() {
                     unreadNotifications,
                 });
             } catch (error) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                toast.error(error);
                 console.error('Failed to fetch stats:', error);
             } finally {
                 setLoading(false);
@@ -90,18 +94,19 @@ export function NavOverview() {
     }) => (
         <SidebarMenuItem>
             <SidebarMenuButton asChild className="h-auto">
-                <Link to={link} className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2">
+                <Link to={link} className="flex w-full items-center">
+                    <>
                         <Icon className="h-4 w-4" />
                         <span className="text-sm">{label}</span>
-                    </div>
-                    {loading ? (
-                        <Skeleton className="h-5 w-6" />
-                    ) : (
-                        <Badge variant={variant === 'warning' ? 'destructive' : variant === 'success' ? 'default' : variant === 'info' ? 'secondary' : 'outline'} className="mr-2 py-0 text-xs">
-                            {value}
-                        </Badge>
-                    )}
+                        <div className="flex-1" />
+                        {loading ? (
+                            <Skeleton className="h-5 w-6" />
+                        ) : (
+                            <Badge variant={variant === 'warning' ? 'destructive' : variant === 'success' ? 'default' : variant === 'info' ? 'secondary' : 'outline'} className="mr-2 py-0 text-xs">
+                                {value}
+                            </Badge>
+                        )}
+                    </>
                 </Link>
             </SidebarMenuButton>
         </SidebarMenuItem>

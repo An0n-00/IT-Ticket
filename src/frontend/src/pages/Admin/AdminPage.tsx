@@ -20,7 +20,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from 'sonner';
 import apiService from '@/lib/api';
 import type { Role, UserWithRole } from '@/types/api';
-import { format } from 'date-fns';
 
 const AdminPage: React.FC = () => {
     const { user, token, role } = useAuth();
@@ -250,7 +249,7 @@ const AdminPage: React.FC = () => {
                                                         <TableCell>
                                                             <div className="text-muted-foreground flex items-center gap-1 text-sm">
                                                                 <Calendar className="h-3 w-3" />
-                                                                {userItem.lastLoginAt ? format(new Date(userItem.lastLoginAt), 'MMM dd, yyyy') : 'Never'}
+                                                                {userItem.lastLoginAt ? new Date(userItem.lastLoginAt).toLocaleDateString() : 'Never'}
                                                             </div>
                                                         </TableCell>
                                                         <TableCell>
