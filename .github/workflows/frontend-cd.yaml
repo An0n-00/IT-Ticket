@@ -9,7 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  build-and-test:
+  build-and-deploy:
+    environment: production
     runs-on: ubuntu-latest
 
     steps:
@@ -23,16 +24,17 @@ jobs:
 
       - name: Install dependencies
         run: npm install --force
-        working-directory: .src/frontend
+        working-directory: ./src/frontend
 
       - name: Build project
         run: npm run build --if-present
-        working-directory: .src/frontend
+        working-directory: ./src/frontend
 
       - name: Fix hard coded linking to relative paths
         run: |
           sed -i 's/\/assets/\.\/assets/g' ./dist/index.html
           sed -i 's/\/IT-Ticket\/assets/\.\/assets/g' ./dist/index.html
+        working-directory: ./src/frontend
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
