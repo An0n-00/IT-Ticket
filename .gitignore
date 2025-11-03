@@ -10,6 +10,7 @@ Logs/
 # Generated files
 project.lock.json
 .vs/
+.vscode/
 
 # mstest test results
 TestResults
