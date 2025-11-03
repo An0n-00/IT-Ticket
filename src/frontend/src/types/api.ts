@@ -57,6 +57,8 @@ export interface Priority {
     name: string;
     color?: string;
     description?: string;
+    // severity/level field used by the frontend for sorting and display
+    level: number;
 }
 
 export interface Role {
@@ -95,8 +97,11 @@ export interface UserWithRole {
     lastName: string;
     roleId: string;
     role?: Role;
-    isActive: true;
+    // whether the user is active
+    isActive: boolean;
     isSuspended: boolean;
+    // optional timestamp of last login
+    lastLoginAt?: string | null;
     createdAt: string;
 }
 

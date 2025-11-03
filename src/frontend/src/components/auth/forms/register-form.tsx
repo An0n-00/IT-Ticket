@@ -56,7 +56,12 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
             // Navigation is handled by the auth context
         } catch (error) {
             // Error is already handled by the auth context
-            toast.error(error);
+            // Narrow unknown error before passing to toast
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error(String(error));
+            }
             console.error('Registration error:', error);
         } finally {
             setIsSubmitting(false);
