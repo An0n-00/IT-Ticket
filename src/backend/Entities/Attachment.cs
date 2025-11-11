@@ -14,7 +14,7 @@ public class Attachment
     public byte[] FileContent { get; set; }
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public bool IsDeleted { get; set; } = false;
-    public DateTime DeletedAt { get; set; }
+    public DateTime DeletedAt { get; set; } = DateTime.MinValue;
 
     public Guid UploadedById { get; set; }
     public virtual User UploadedBy { get; set; }

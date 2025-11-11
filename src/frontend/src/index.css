@@ -123,10 +123,17 @@
 *::selection {
     @apply bg-primary-foreground text-primary;
 }
+
 *::-moz-selection {
     @apply bg-primary-foreground text-primary;
 }
 
 button:hover {
     @apply cursor-pointer;
+}
+
+/* Style all scroll bars with the primary and primary foreground color */
+* {
+    scrollbar-color: var(--color-primary) var(--color-secondary);
+    scrollbar-width: thin;
 }

@@ -1,18 +1,22 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import type { User, AuthProviderProps, AuthContextType, RegisterData } from '@/types/auth.ts';
+import type { AuthContextType, AuthProviderProps, RegisterData, User } from '@/types/auth.ts';
+import type { Role } from '@/types/api.ts';
+import apiService from '@/lib/api.ts';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // API base URL
+// eslint-disable-next-line react-refresh/only-export-components
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [role, setRole] = useState<Role | null>(null);
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
     const navigate = useNavigate();
 
@@ -20,7 +24,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
+        setRole(null);
         setIsAuthenticated(false);
+        // Clear token from apiService as well
+        apiService.setToken(null);
         navigate('/');
         toast.success('Logged out successfully');
     }, [navigate]);
@@ -31,6 +38,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             if (storedToken) {
                 setToken(storedToken);
                 setIsAuthenticated(true);
+                // Set token in apiService
+                apiService.setToken(storedToken);
                 try {
                     await fetchUserData(storedToken);
                 } catch {
@@ -45,38 +54,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const fetchUserData = async (authToken: string) => {
         try {
             setLoading(true);
-            setError(null);
+            setToken(authToken);
+            // Set the token in apiService first
+            apiService.setToken(authToken);
+            setUser(await apiService.getUser((await apiService.getCurrentUserId()).id));
+            setRole(await apiService.getRole((await apiService.getUser((await apiService.getCurrentUserId()).id)).roleId));
 
-            const userResponse = await fetch(`${BACKEND_URL}/api/user`, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-
-            if (!userResponse.ok) {
-                const errorData = await userResponse.json();
-                toast.error(errorData.message || 'Failed to fetch user id');
-                throw new Error('Failed to fetch user id');
-            }
-
-            const userData = await userResponse.json();
-
-            const userDetailsResponse = await fetch(`${BACKEND_URL}/api/user/${userData.id}`, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-
-            if (!userDetailsResponse.ok) {
-                throw new Error('Failed to fetch user details');
-            }
-
-            const userDetails = await userDetailsResponse.json();
-            setUser(userDetails);
-        } catch (error: Error | any) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+        } catch (error: Error) {
             console.error('Error fetching user data:', error);
             toast.error(error.message || 'Failed to fetch user data');
-            setError('Failed to fetch user data');
             throw error;
         } finally {
             setLoading(false);
@@ -87,7 +75,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const login = async (username: string, password: string) => {
         try {
             setLoading(true);
-            setError(null);
 
             const response = await fetch(`${BACKEND_URL}/auth/api/login`, {
                 method: 'POST',
@@ -99,7 +86,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                toast.error(errorData.message || 'Login failed');
                 throw new Error(errorData.message || 'Login failed');
             }
 
@@ -119,7 +105,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } catch (error) {
             console.error('Login error:', error);
             toast.error(error instanceof Error ? error.message : 'Login failed');
-            setError(error instanceof Error ? error.message : 'Login failed');
             throw error;
         } finally {
             setLoading(false);
@@ -130,7 +115,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const register = async (registerData: RegisterData) => {
         try {
             setLoading(true);
-            setError(null);
 
             const response = await fetch(`${BACKEND_URL}/auth/api/register`, {
                 method: 'POST',
@@ -158,7 +142,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             navigate('/dashboard');
         } catch (error) {
             console.error('Registration error:', error);
-            setError(error instanceof Error ? error.message : 'Registration failed');
+            toast.error(error instanceof Error ? error.message : 'Login failed');
             throw error;
         } finally {
             setLoading(false);
@@ -172,8 +156,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         register,
         logout,
+        role,
         loading,
-        error,
         BACKEND_URL,
     };
 

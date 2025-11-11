@@ -1,17 +1,19 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { ModeToggle as ThemeToggle } from '@/components/ui/theme-toggle';
 import { Link, useNavigate } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, HelpCircle, Home, LucideLogIn, LucideMenu, LucideUserPlus2, TicketIcon, Users } from 'lucide-react';
+import { CheckCircle, Clock, HelpCircle, Home, LogInIcon, LucideLogIn, LucideMenu, LucideUserPlus2, Server, TicketIcon, Users } from 'lucide-react';
 import green_logo from '@/public/logo-green.svg';
-import dashboard_pic from '@/public/dashboard.png';
+import dashboard_pic_dark from '@/public/dashboard.png';
+import dashboard_pic_light from '@/public/dashboard_light.png';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import RotatingText from '@/components/bits/textanimations/RotatingText/RotatingText.tsx';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import FeatureCards from '@/components/main/FeatureCards.tsx';
 
 export default function Main() {
     const hash = window.location.hash.replace('#', '');
@@ -46,9 +48,10 @@ export default function Main() {
 
 interface HeaderProps {
     id?: string;
+    shadow?: boolean;
 }
 
-export function Header({ id }: HeaderProps) {
+export function Header({ id = 'header', shadow = true }: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -64,8 +67,10 @@ export function Header({ id }: HeaderProps) {
     };
 
     return (
-        <header id={id} className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
-            <div className="container flex h-16 items-center justify-between px-3">
+        <header id={id} className="sticky top-0 z-50 h-0 w-auto">
+            <div
+                className={`supports-[backdrop-filter]:bg-background/60 border-b-primary sticky z-50 container mx-4 mt-4 flex h-16 w-auto items-center justify-between rounded-2xl px-3 backdrop-blur ${shadow ? 'shadow-lg' : ''}`}
+            >
                 <div className="flex items-center gap-2">
                     <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
                         <img src={green_logo} alt="IT-Ticket Logo" className="h-8 w-auto" />
@@ -85,8 +90,8 @@ export function Header({ id }: HeaderProps) {
                                     }}
                                 >
                                     <div className={'flex items-center gap-2'}>
-                                        <Home className="h-4 w-4" />
                                         <span>Home</span>
+                                        <Home className="h-4 w-4" />
                                     </div>
                                 </Link>
                             </NavigationMenuLink>
@@ -95,8 +100,8 @@ export function Header({ id }: HeaderProps) {
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                                 <Link to="https://github.com/An0n-00/IT-Ticket#:~:text=documentation%20is%20incomplete" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                                     <div className={'flex items-center gap-2'}>
-                                        <HelpCircle className="h-4 w-4" />
                                         <span>Help</span>
+                                        <HelpCircle className="h-4 w-4" />
                                     </div>
                                 </Link>
                             </NavigationMenuLink>
@@ -163,8 +168,8 @@ interface IdProps {
 
 function Hero({ id }: IdProps) {
     return (
-        <section id={id} className="px-4 py-16 md:px-6 md:py-20 lg:py-32">
-            <div className="container mx-auto flex flex-col items-center text-center">
+        <section id={id} className="relative container mx-auto flex flex-col items-center px-4 py-16 text-center">
+            <div className="z-1 container mx-auto mt-8 flex flex-col items-center text-center sm:mt-16">
                 <Badge className="mb-4 animate-pulse">In Beta β</Badge>
                 <h1 className="mb-6 flex flex-wrap items-center justify-center gap-2 text-3xl font-bold tracking-tight md:text-4xl lg:text-6xl">
                     <div className="inline-flex">
@@ -174,7 +179,7 @@ function Hero({ id }: IdProps) {
                             staggerFrom={'last'}
                             staggerDuration={0.025}
                             splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1 "
-                            rotationInterval={3500}
+                            rotationInterval={3000}
                         />
                     </div>
                     <span className="ml-2">Your IT Support with</span>
@@ -188,22 +193,37 @@ function Hero({ id }: IdProps) {
                     platform.
                 </p>
                 <div className="flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
-                    <Button size="lg" className="group relative w-full overflow-hidden rounded-md sm:w-auto" asChild>
-                        <Link to="/login">
-                            <span className="relative z-10">Get Started</span>
-                        </Link>
-                    </Button>
                     <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
                         <Link target="_blank" rel="noopener noreferrer" to="https://github.com/An0n-00/IT-Ticket">
                             Host it yourself
+                            <Server />
+                        </Link>
+                    </Button>
+                    <Button size="lg" className="group relative w-full overflow-hidden rounded-md sm:w-auto" asChild>
+                        <Link to="/login">
+                            <span className="relative z-10">Get Started</span>
+                            <LogInIcon />
                         </Link>
                     </Button>
                 </div>
                 <div className="relative mt-12 w-full max-w-[1000px] md:mt-16">
                     <div className="from-primary to-primary/20 absolute -inset-1 rounded-lg bg-gradient-to-r opacity-75 blur-md"></div>
                     <div className="bg-background border-primary/20 relative rounded-lg border p-2 shadow-xl transition-all duration-300 md:p-3">
-                        <img src={dashboard_pic} alt="IT-Ticket Dashboard Preview" className="h-auto w-full rounded-md" loading="lazy" />
+                        <img src={dashboard_pic_dark} alt="IT-Ticket Dashboard Preview" className="h-auto w-full rounded-md" loading="lazy" />
+                        <img src={dashboard_pic_light} alt="IT-Ticket Dashboard Preview" className="absolute top-0 left-0 h-full w-full rounded-md dark:hidden" loading="lazy" />
                     </div>
+                </div>
+            </div>
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute top-0 left-0 h-full w-full">
+                    <div className="bg-primary/60 absolute -top-48 -left-48 h-[40vw] max-h-[600px] min-h-[300px] w-[40vw] max-w-[600px] min-w-[300px] rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute -top-32 -left-32 h-[30vw] max-h-[400px] min-h-[200px] w-[30vw] max-w-[400px] min-w-[200px] rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute -top-16 -left-16 h-[20vw] max-h-[200px] min-h-[100px] w-[20vw] max-w-[200px] min-w-[100px] rounded-full blur-[64px]"></div>
+                </div>
+                <div className="absolute right-0 bottom-0 h-full w-full">
+                    <div className="bg-primary/60 absolute -right-48 -bottom-48 h-[40vw] max-h-[600px] min-h-[300px] w-[40vw] max-w-[600px] min-w-[300px] rounded-full blur-[128px]"></div>
+                    <div className="bg-primary/20 absolute -right-32 -bottom-32 h-[30vw] max-h-[400px] min-h-[200px] w-[30vw] max-w-[400px] min-w-[200px] rounded-full blur-[96px]"></div>
+                    <div className="bg-primary/10 absolute -right-16 -bottom-16 h-[20vw] max-h-[200px] min-h-[100px] w-[20vw] max-w-[200px] min-w-[100px] rounded-full blur-[64px]"></div>
                 </div>
             </div>
         </section>
@@ -255,26 +275,7 @@ function Features({ id }: FeaturesProps) {
                     <h2 className="mb-2 text-2xl font-bold tracking-tight md:mb-4 md:text-3xl">Powerful Features</h2>
                     <p className="text-muted-foreground mx-auto max-w-[800px] text-sm md:text-xl">Everything you need to manage IT support requests efficiently and effectively.</p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    {features.map((feature, index) => (
-                        <Card key={index} className="hover:border-primary/50 border-muted border transition-all duration-300 md:border-2">
-                            <CardHeader className="p-4 md:p-6">
-                                <div className="mb-2 flex">{feature.icon}</div>
-                                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
-                                    {feature.title}
-                                    {feature.title === 'SLA Compliance' && (
-                                        <Badge variant="secondary" className="ml-2 text-xs">
-                                            Coming soon
-                                        </Badge>
-                                    )}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-                                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                <FeatureCards features={features} />
             </div>
         </section>
     );
@@ -287,17 +288,17 @@ interface TestimonialsProps {
 function Testimonials({ id }: TestimonialsProps) {
     const testimonials = [
         {
-            quote: 'IT-Ticket has transformed how we handle IT support requests. Our response times have improved by 45%.',
+            quote: 'IT-Ticket has transformed how we handle IT support requests. Our response times have <b>improved by 45%.</b>',
             author: 'Sarah Johnson',
             role: 'IT Director, Acme Corp',
         },
         {
-            quote: "The intuitive interface and powerful features make IT-Ticket the best ticketing system we've ever used.",
+            quote: "The <b>intuitive interface and powerful features</b> make IT-Ticket the best ticketing system we've ever used.",
             author: 'Michael Chen',
             role: 'Help Desk Manager, Tech-Solutions',
         },
         {
-            quote: "We've reduced our ticket resolution time by 30% since implementing IT-Ticket. Highly recommended!",
+            quote: "We've <b>reduced our ticket resolution time by 30%</b> since implementing IT-Ticket. Highly recommended!",
             author: 'Emily Rodriguez',
             role: 'CIO, NexGen Tech Management Solutions',
         },
@@ -313,10 +314,9 @@ function Testimonials({ id }: TestimonialsProps) {
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3 md:gap-8">
                     {testimonials.map((testimonial, index) => (
-                        <Card key={index} className="bg-muted/30">
+                        <Card key={index} className="bg-muted/30 border-primary/20 shadow-primary/20 transition-all duration-300 hover:shadow-xl">
                             <CardContent className="p-4 md:p-6">
-                                <div className="mb-2 text-3xl md:mb-4 md:text-4xl">"</div>
-                                <p className="mb-4 text-sm italic md:mb-6 md:text-base">{testimonial.quote}</p>
+                                <div className="mb-2 text-3xl md:mb-4 md:text-3xl" dangerouslySetInnerHTML={{ __html: testimonial.quote }}></div>
                                 <div>
                                     <p className="text-sm font-semibold md:text-base">{testimonial.author}</p>
                                     <p className="text-muted-foreground text-xs md:text-sm">{testimonial.role}</p>
@@ -345,10 +345,16 @@ function CTA({ id }: CTAProps) {
                 </p>
                 <div className="flex w-full flex-col justify-center gap-4 sm:flex-row">
                     <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
-                        <Link to={'/login'}>Use this Instance</Link>
+                        <Link to={'/login'}>
+                            Use this Instance
+                            <LogInIcon />
+                        </Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="text-secondary-foreground w-full sm:w-auto" asChild>
-                        <Link to="https://github.com/An0n-00/IT-Ticket">Host your own Instance for Free</Link>
+                    <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+                        <Link to="https://github.com/An0n-00/IT-Ticket">
+                            Host your own Instance for Free
+                            <Server />
+                        </Link>
                     </Button>
                 </div>
             </div>
@@ -363,7 +369,7 @@ interface FooterProps {
 
 function Footer({ id, scrollToSection }: FooterProps) {
     return (
-        <footer id={id} className="bg-muted py-8 md:py-12">
+        <footer id={id} className="bg-secondary py-8 md:py-12">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="mb-6 grid grid-cols-2 gap-6 md:mb-8 md:grid-cols-4 md:gap-8">
                     <div className="col-span-2 md:col-span-1">

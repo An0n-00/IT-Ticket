@@ -10,8 +10,8 @@
     public List<Guid>? AuditLogs { get; set; } = [];
     public List<Guid>? Notifications  { get; set; } = [];
     public bool IsDeleted { get; set; } = false;
-    public DateTime DeletedAt { get; set; } 
+    public DateTime DeletedAt { get; set; } = DateTime.MinValue;
     public bool IsSuspended { get; set; }
-    public DateTime SuspendedAt { get; set; }
+    public DateTime SuspendedAt { get; set; } = DateTime.MinValue;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

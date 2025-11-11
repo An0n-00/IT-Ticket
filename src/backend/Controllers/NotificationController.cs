@@ -61,7 +61,6 @@ public class NotificationController(Context context) : ControllerBase
     /// <summary>
     /// Gets all Notifications for the current user.
     /// </summary>
-    /// <param name="isRead">A query parameter (bool) that indicates whether the notification should ONLY be the non read</param>
     /// <remarks>
     /// Route: /api/notification
     /// Method: GET
@@ -73,14 +72,14 @@ public class NotificationController(Context context) : ControllerBase
     /// 400: Returns a Bad Request if any error occurs
     /// </returns>
     [HttpGet]
-    public IActionResult GetNotifications([FromQuery] Boolean? isRead = false)
+    public IActionResult GetNotifications()
     {
         try
         {
             var userId = HelperClass.ParseUser(User, _context).Id;
 
             var notifications = _context.Notifications
-                .Where(n => n.UserId == userId && (isRead == null || n.IsRead == isRead))
+                .Where(n => n.UserId == userId)
                 .Select(n => n.Id)
                 .ToList();
             
