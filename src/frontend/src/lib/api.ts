@@ -286,7 +286,7 @@ class ApiService {
                 console.error('API Error:', endpoint, error.message);
                 throw error;
             }
-            console.error(`Unknown API Error (${endpoint}):`, error);
+            console.error('Unknown API Error (%s):', endpoint, error);
             throw new Error('Unknown error occurred');
         }
     }
