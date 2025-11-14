@@ -25,10 +25,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 
         try {
             setIsSubmitting(true);
-            await login(username, password);
+            await login(username.trim(), password.trim());
             toast.success('Login successful!');
-        } catch (error) {
-            console.error('Login error:', error);
         } finally {
             setIsSubmitting(false);
         }

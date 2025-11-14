@@ -22,9 +22,9 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public bool IsDeleted { get; set; } = false;
-    public DateTime DeletedAt { get; set; } 
+    public DateTime DeletedAt { get; set; } = DateTime.MinValue;
     public bool IsSuspended { get; set; }
-    public DateTime SuspendedAt { get; set; }
+    public DateTime SuspendedAt { get; set; } = DateTime.MinValue;
 
     public Guid RoleId { get; set; }
     public virtual Role Role { get; set; }

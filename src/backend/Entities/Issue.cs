@@ -11,8 +11,8 @@ public class Issue
     public required string Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public bool IsDeleted { get; set; } = false;
-    public DateTime DeletedAt { get; set; }
-    public DateTime? LastUpdated { get; set; }
+    public DateTime DeletedAt { get; set; } = DateTime.MinValue;
+    public DateTime? LastUpdated { get; set; } = DateTime.MinValue;
 
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
