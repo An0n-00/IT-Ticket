@@ -2,11 +2,7 @@ name: Only allow PRs from Dev to Main
 
 on:
   pull_request:
-    branches: [main]
-    types:
-      - opened
-      - reopened
-      - synchronize
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -16,7 +12,6 @@ permissions:
 jobs:
   check-pr:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check if PR is from Dev to Main
         run: |
@@ -24,34 +19,26 @@ jobs:
           HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
           HEAD_REPO="${{ github.event.pull_request.head.repo.full_name }}"
           REPO="${{ github.repository }}"
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          EVENT_TYPE="${{ github.event.action }}"
-          IS_MERGED="${{ github.event.pull_request.merged }}"
 
           echo "Base branch: $BASE_BRANCH"
           echo "Head branch: $HEAD_BRANCH"
           echo "Head repo: $HEAD_REPO"
           echo "Repository: $REPO"
-          echo "Event type: $EVENT_TYPE"
-          # Only run validation for PRs that are not closed/merged
-          if [[ "$EVENT_TYPE" != "closed" ]]; then
-            if [[ "$BASE_BRANCH" != "main" || "$HEAD_BRANCH" != "dev" || "$HEAD_REPO" != "$REPO" ]]; then
-              echo "::error::Only Pull Requests from 'dev' to 'main' in the same repository are allowed."
-              COMMENT="This pull request has been automatically closed because it is not from 'dev' to 'main' or from the same repository."
-              # Comment on the PR
-              curl -X POST \
-                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                -d '{"body":"'"$COMMENT"'"}' \
-                "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
-
-              # Close the PR
-              curl -X PATCH \
-                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                -d '{"state": "closed"}' \
-                "https://api.github.com/repos/$REPO/pulls/$PR_NUMBER"
-
-              exit 1
-            else
-              echo "✅ Pull request is valid (Dev → Main)."
-            fi
+          
+          if [[ "$BASE_BRANCH" != "main" || "$HEAD_BRANCH" != "dev" || "$HEAD_REPO" != "$REPO" ]]; then
+            echo "Invalid PR source or destination. Posting comment and changing base branch to dev."
+          
+            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -d '{"body": "Only Pull Requests from [dev](https://github.com/${{ github.repository }}/tree/dev) are allowed to be merged to [main](https://github.com/${{ github.repository }}/tree/main). The base branch will be changed to dev. Please wait for GitHub to change the base branch before doing any other action. 🔄"}' \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+          
+            curl -s -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -d '{"base": "dev"}' \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}"
+          
+            echo "::warning::Only PRs from dev to main are allowed. The base branch was changed to dev."
+            exit 0
+          else
+            echo "✅ Pull request is valid (Dev → Main)."
+            exit 0
           fi
