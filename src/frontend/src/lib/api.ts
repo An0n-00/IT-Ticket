@@ -283,7 +283,7 @@ class ApiService {
             return await response.json();
         } catch (error) {
             if (error instanceof Error) {
-                console.error(`API Error (${endpoint}):`, error.message);
+                console.error('API Error:', endpoint, error.message);
                 throw error;
             }
             console.error(`Unknown API Error (${endpoint}):`, error);
